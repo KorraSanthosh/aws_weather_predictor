@@ -1,0 +1,40 @@
+# --- secrets and credentials (never commit) ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+credentials
+credentials.json
+.aws/
+samconfig.toml
+
+# --- Python environments and caches ---
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# --- build output ---
+build/
+dist/
+*.egg-info/
+.aws-sam/
+node_modules/
+*.zip
+
+# --- local files ---
+*.log
+*.tmp
+nohup.out
+.DS_Store
+.idea/
+.vscode/
+
+# --- large raw datasets (re-create with pipeline/ scripts; see README) ---
+data/raw/
