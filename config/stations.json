@@ -1,0 +1,12 @@
+[
+  {"location_id": 17,    "name": "R K Puram, Delhi - DPCC",          "pm25_sensor_id": 12234787},
+  {"location_id": 235,   "name": "Anand Vihar, New Delhi - DPCC",    "pm25_sensor_id": 12235610},
+  {"location_id": 50,    "name": "Punjabi Bagh, Delhi - DPCC",       "pm25_sensor_id": 396},
+  {"location_id": 5404,  "name": "Pusa, Delhi - IMD",                "pm25_sensor_id": 12234702},
+  {"location_id": 5613,  "name": "ITO, New Delhi - CPCB",            "pm25_sensor_id": 14878},
+  {"location_id": 6931,  "name": "Dwarka-Sector 8, Delhi - DPCC",    "pm25_sensor_id": 12235020},
+  {"location_id": 10831, "name": "Rohini, Delhi - DPCC",             "pm25_sensor_id": 12235092},
+  {"location_id": 8239,  "name": "Okhla Phase-2, Delhi - DPCC",      "pm25_sensor_id": 12235074},
+  {"location_id": 6358,  "name": "Mandir Marg, New Delhi - DPCC",    "pm25_sensor_id": 12234778},
+  {"location_id": 6932,  "name": "Alipur, Delhi - DPCC",             "pm25_sensor_id": 19935}
+]
