@@ -1,0 +1,28 @@
+{
+  "source": "openaq",
+  "stations": [
+    "10831",
+    "17",
+    "235",
+    "236",
+    "2503",
+    "431",
+    "50",
+    "5404",
+    "5613",
+    "6358",
+    "6931",
+    "6932",
+    "8239"
+  ],
+  "first": "2018-01-04",
+  "last": "2026-10-07",
+  "days_with_pm25": 1823,
+  "calendar_days": 3199,
+  "min_stations": 3,
+  "excluded_ranges": [
+    "2020-03-25:2020-06-30"
+  ],
+  "days_excluded": 44,
+  "days_dropped_too_few_stations": 509
+}
