@@ -1,0 +1,96 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Kal Ki Hawa - next-day PM2.5 forecast for Delhi schools
+
+Parameters:
+  OpenAQApiKey:
+    Type: String
+    NoEcho: true
+    Description: Free key from https://explore.openaq.org/register
+  SensorIds:
+    Type: String
+    Description: Comma-separated OpenAQ PM2.5 sensor ids (see config/stations.json)
+  AlertEmail:
+    Type: String
+    Description: Email that receives Poor-or-worse alerts (you must confirm the subscription email)
+
+Globals:
+  Function:
+    Runtime: python3.12
+    Timeout: 60
+    MemorySize: 512
+
+Resources:
+  ForecastTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - { AttributeName: pk, AttributeType: S }
+        - { AttributeName: sk, AttributeType: S }
+      KeySchema:
+        - { AttributeName: pk, KeyType: HASH }
+        - { AttributeName: sk, KeyType: RANGE }
+
+  AlertTopic:
+    Type: AWS::SNS::Topic
+
+  AlertSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref AlertTopic
+      Protocol: email
+      Endpoint: !Ref AlertEmail
+
+  ForecastFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: build/lambda/
+      Handler: forecast_handler.handler
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref ForecastTable
+          TOPIC_ARN: !Ref AlertTopic
+          OPENAQ_API_KEY: !Ref OpenAQApiKey
+          SENSOR_IDS: !Ref SensorIds
+      Policies:
+        - DynamoDBCrudPolicy: { TableName: !Ref ForecastTable }
+        - SNSPublishMessagePolicy: { TopicName: !GetAtt AlertTopic.TopicName }
+      Events:
+        Nightly:
+          Type: Schedule
+          Properties:
+            Schedule: cron(30 17 * * ? *)   # 17:30 UTC = 23:00 IST
+            Description: Nightly forecast for tomorrow
+
+  ApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: build/lambda/
+      Handler: api_handler.handler
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref ForecastTable
+      Policies:
+        - DynamoDBReadPolicy: { TableName: !Ref ForecastTable }
+      Events:
+        GetForecast:
+          Type: HttpApi
+          Properties:
+            Path: /forecast
+            Method: GET
+            ApiId: !Ref HttpApi
+
+  HttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowOrigins: ["*"]
+        AllowMethods: [GET]
+
+Outputs:
+  ApiUrl:
+    Description: Paste this into web/config.js
+    Value: !Sub "https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com"
+  TableName:
+    Value: !Ref ForecastTable
