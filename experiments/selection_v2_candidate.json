@@ -1,0 +1,52 @@
+{
+  "features": [
+    "pm_d0",
+    "pm_d1",
+    "pm_d2",
+    "pm_d3",
+    "pm_d6",
+    "pm_mean3",
+    "pm_mean7",
+    "pm_std7",
+    "pm_delta1",
+    "wx0_temp",
+    "wx0_rh",
+    "wx0_wind",
+    "wx0_precip",
+    "wx0_pressure",
+    "wx0_wind_u",
+    "wx0_wind_v",
+    "wx1_temp",
+    "wx1_rh",
+    "wx1_wind",
+    "wx1_precip",
+    "wx1_pressure",
+    "wx1_wind_u",
+    "wx1_wind_v",
+    "doy_sin",
+    "doy_cos",
+    "pm_d7",
+    "pm_d13"
+  ],
+  "kind": "xgb",
+  "params": {
+    "n_estimators": 300,
+    "learning_rate": 0.02,
+    "max_depth": 5,
+    "subsample": 1.0,
+    "colsample_bytree": 1.0,
+    "min_child_weight": 1,
+    "reg_alpha": 0.1,
+    "reg_lambda": 10.0
+  },
+  "sample_weighting": "none",
+  "season_aware": false,
+  "category_approach": "A",
+  "classifier_params": {
+    "n_estimators": 300,
+    "learning_rate": 0.05,
+    "max_depth": 3
+  },
+  "selected_on": "2019-01-01 .. 2022-12-31 (walk-forward monthly)",
+  "frozen_at": "2026-10-08"
+}
