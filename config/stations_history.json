@@ -1,0 +1,32 @@
+[
+  {
+    "location_id": 235,
+    "name": "Anand Vihar, New Delhi - DPCC",
+    "pm25_sensor_id": 384
+  },
+  {
+    "location_id": 17,
+    "name": "R K Puram, Delhi - DPCC",
+    "pm25_sensor_id": 35
+  },
+  {
+    "location_id": 50,
+    "name": "Punjabi Bagh, Delhi - DPCC",
+    "pm25_sensor_id": 396
+  },
+  {
+    "location_id": 236,
+    "name": "Mandir Marg, Delhi - DPCC",
+    "pm25_sensor_id": 388
+  },
+  {
+    "location_id": 2503,
+    "name": "Shadipur, Delhi - CPCB",
+    "pm25_sensor_id": 13860
+  },
+  {
+    "location_id": 431,
+    "name": "IHBAS, Delhi - CPCB",
+    "pm25_sensor_id": 13868
+  }
+]
