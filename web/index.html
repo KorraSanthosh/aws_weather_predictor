@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kal Ki Hawa — Tomorrow's air for Delhi schools</title>
+  <meta name="description" content="Machine-learning forecast of tomorrow's PM2.5 and AQI for Delhi, with a clear go / caution / indoors call for schools.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap top-inner">
+      <div>
+        <h1>Kal Ki Hawa</h1>
+        <p class="tag">Tomorrow's air, today — a forecast for Delhi schools</p>
+      </div>
+      <p class="stamp" id="stamp" aria-live="polite"></p>
+    </div>
+  </header>
+
+  <div id="demo-banner" class="banner" hidden>
+    DEMO DATA — these numbers are synthetic test data, not real air-quality measurements.
+  </div>
+  <div id="error" class="banner error" hidden></div>
+
+  <main class="wrap">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="card forecast" id="forecast-card">
+        <h2 id="hero-title">Forecast for <span id="target-date">…</span></h2>
+        <div class="aqi-row">
+          <div class="aqi-num" id="aqi">–</div>
+          <div>
+            <div class="pill" id="category">Loading</div>
+            <p class="muted" id="pm-range"></p>
+          </div>
+        </div>
+        <p class="muted small" id="today-line"></p>
+      </div>
+
+      <div class="card decision" id="decision-card">
+        <h2>School decision</h2>
+        <div class="decision-word" id="decision">–</div>
+        <p class="headline" id="headline"></p>
+        <p id="advice"></p>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>How good is the forecast?</h2>
+      <p class="muted">Predicted vs actual daily PM2.5 (µg/m³) on days the model had never seen.</p>
+      <div id="chart" class="chart"></div>
+      <div class="legend" aria-hidden="true">
+        <span><i class="sw actual"></i>Actual</span>
+        <span><i class="sw pred"></i>Our forecast</span>
+        <span><i class="sw base"></i>"Tomorrow = today"</span>
+      </div>
+    </section>
+
+    <section class="card" id="metrics-card" hidden>
+      <h2>Accuracy on unseen days</h2>
+      <p class="muted small" id="metrics-note"></p>
+      <div id="metrics" class="metrics"></div>
+    </section>
+  </main>
+
+  <footer class="wrap foot">
+    <p>Data: ground-station PM2.5 from OpenAQ (open data on AWS), weather from Open-Meteo, CAMS model benchmark.
+       Built on AWS: S3, Lambda, EventBridge, DynamoDB, SNS, API Gateway, Amplify.</p>
+    <p>Guidance is general and not medical advice. School closure decisions rest with school management and the local authority.</p>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
