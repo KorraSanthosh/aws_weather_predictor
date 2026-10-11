@@ -1,0 +1,12 @@
+{
+  "17":    {"short": "R K Puram",   "lat": 28.5633, "lon": 77.1869},
+  "235":   {"short": "Anand Vihar", "lat": 28.6469, "lon": 77.3158},
+  "50":    {"short": "Punjabi Bagh","lat": 28.6740, "lon": 77.1310},
+  "5404":  {"short": "Pusa",        "lat": 28.6397, "lon": 77.1461},
+  "5613":  {"short": "ITO",         "lat": 28.6316, "lon": 77.2410},
+  "6931":  {"short": "Dwarka-8",    "lat": 28.5710, "lon": 77.0719},
+  "10831": {"short": "Rohini",      "lat": 28.7324, "lon": 77.1186},
+  "8239":  {"short": "Okhla-2",     "lat": 28.5308, "lon": 77.2711},
+  "6358":  {"short": "Mandir Marg", "lat": 28.6366, "lon": 77.2010},
+  "6932":  {"short": "Alipur",      "lat": 28.8150, "lon": 77.1530}
+}

@@ -1,0 +1,54 @@
+{
+  "status": "PREPARED - becomes FROZEN when this file is committed and the commit is tagged",
+  "protocol": {
+    "protocol_version": "1.0",
+    "baseline": "v1_25_baseline",
+    "candidates": [
+      "v2_35_candidate",
+      "v3_hybrid"
+    ],
+    "hybrid_rule": "v2_35_candidate if all 7 day-part inputs are finite, else v1_25_baseline",
+    "window_target_dates": [
+      "2026-10-15",
+      "2027-02-15"
+    ],
+    "analysis_not_before": "2027-02-16",
+    "min_matched_days": 90,
+    "min_matched_daypart_days": 90,
+    "primary_metric": "MAE (ug/m3)",
+    "secondary_metric": "AQI-category accuracy",
+    "mae_reduction_required_pct": 5.0,
+    "mae_ci_upper_must_be_below_pct": 0.0,
+    "category_accuracy_max_drop_pp": 2.0,
+    "ci_level": 0.95,
+    "bootstrap": {
+      "block_days": 7,
+      "n_boot": 2000,
+      "seed": 0
+    },
+    "segments": [
+      "complete_eligible",
+      "daypart_days",
+      "no_daypart_days"
+    ],
+    "gate_segment": "complete_eligible"
+  },
+  "files_sha256": {
+    "model/v1_25_baseline/model.json": "93199a4e3e58f9f1e5576075507e813c2d28c97d51817fb64b03b2a6eb96f564",
+    "model/v1_25_baseline/model_meta.json": "6ae733cdb844f102ca0503a3f54fed8713f5fbac8eb880aacb86c97115faec69",
+    "model/v2_35_candidate/model.json": "0d48f4d7b69c695898f0f4795f2edc26b820b88fb4e65533aacb48031c325bfe",
+    "model/v2_35_candidate/model_meta.json": "ede4d8144ef2fb49e824882c5831eb31ae048540c2d2c49f689156a2a96017e3",
+    "core/features.py": "55fa37a82baf24cf8676f887f96565f417cdc633b5a067c3eb3d632532a5c318",
+    "core/daily.py": "2428da475f24ecd61edd0aadbd320d3f6d59713deebe204a24a4ec4036788a5e",
+    "core/aqi.py": "745dfb766a5c009a15a175b12b1a49737471c45cc60e05c17212e87259a069c0",
+    "core/hybrid.py": "f2ced15e027aaec068e4a10191cb46a7be84d64d794481613a8f60e5168b8110",
+    "backend/forecast_handler.py": "8b977208b25883772e601d789c8c780b8ebdfffe4895124347e5eca6326c9cf0",
+    "model/forward_protocol.py": "f7a9e95515768d652e04b26616003553cfc14f1d2b5e7f7ad58d3a54e03859ad",
+    "model/forward_eval.py": "9e953aee86ab1dfb2018cd3b910e24569466af18f4f3ad2a07390647c047c603",
+    "model/EVALUATION_PROTOCOL.md": "d143fcbf46e933ecb00f3f0259b24d37aecf97a2f9106125500d18df88aed7d0"
+  },
+  "environment_when_prepared": {
+    "python": "3.13.16",
+    "xgboost": "3.4.1"
+  }
+}

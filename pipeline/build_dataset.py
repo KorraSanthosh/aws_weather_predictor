@@ -16,7 +16,8 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from core.daily import MIN_STATIONS, city_daily_mean, city_daily_stats, readings_to_daily  # noqa: E402
+from core.daily import (DP_KEYS, MIN_STATIONS, city_daily_mean, city_daily_stats, city_hourly,  # noqa: E402
+                        daypart_stats, readings_to_daily, readings_to_hourly)
 from core.weather import WEATHER_KEYS  # noqa: E402
 
 RAW = Path("data/raw")
@@ -79,6 +80,10 @@ def main(argv=None):
     ap.add_argument("--exclude", action="append", default=[], metavar="START:END",
                     help="drop PM2.5 days in this range (YYYY-MM-DD:YYYY-MM-DD), e.g. the COVID lockdown "
                          "--exclude 2020-03-25:2020-06-30 . Can be repeated.")
+    ap.add_argument("--extra-source", action="append", default=[], metavar="SUBDIR",
+                    help="additional station-file folder under data/raw (same 'datetime,pm25' format), e.g. opencity_hourly")
+    ap.add_argument("--out", default="data/daily.csv",
+                    help="output CSV (default data/daily.csv); the .meta.json is written next to it")
     args = ap.parse_args(argv)
     excluded = []
     for r in args.exclude:
@@ -87,7 +92,7 @@ def main(argv=None):
 
     # one entry per station; archive (S3) and API-backfill files are merged
     station_files: dict[str, list[Path]] = {}
-    for sub in ("openaq", "openaq_api", "openaq_recent"):
+    for sub in ("openaq", "openaq_api", "openaq_recent", *args.extra_source):
         for p in sorted((RAW / sub).glob("*.csv")):
             station_files.setdefault(p.stem, []).append(p)
     if not station_files and not list((RAW / "cpcb").glob("*.csv")):
@@ -100,12 +105,13 @@ def main(argv=None):
         cpcb_files.setdefault(cpcb_station_key(p), []).append(p)
     for sid in cpcb_files:
         station_files.setdefault(sid, [])
-    per_station, coverage = [], {}
+    per_station, per_station_hourly, coverage = [], [], {}
     for sid, paths in station_files.items():
         readings = []
         for p in paths:
             readings.extend(load_station(p))
         daily = readings_to_daily(readings)   # same-hour readings are averaged, so overlaps are harmless
+        per_station_hourly.append(readings_to_hourly(readings))   # CPCB daily files have no hours: none for those
         for p in cpcb_files.get(sid, []):     # official daily files fill days the hourly data lacks
             for day, val in load_cpcb_daily(p).items():
                 daily.setdefault(day, val)
@@ -114,6 +120,7 @@ def main(argv=None):
     city_all = city_daily_mean(per_station)                       # every day with any station
     city = city_daily_mean(per_station, min_stations=args.min_stations)
     stats = city_daily_stats(per_station, min_stations=args.min_stations)
+    hourly = city_hourly(per_station_hourly)                      # for the day-part features
     dropped = len(city_all) - len(city)
     n_excluded = 0
     for d in [d for d in list(city) if any(a <= d <= b for a, b in excluded)]:
@@ -138,9 +145,10 @@ def main(argv=None):
     last = max(city) if city else None
     days = [d for d in days if first <= d <= last]
 
-    Path("data").mkdir(exist_ok=True)
-    cols = ["date", "pm25", "n_stations", "pm25_sd", "pm25_max", "pm25_min"] + WEATHER_KEYS + ["cams_pm25"]
-    with open("data/daily.csv", "w", newline="") as f:
+    out_path = Path(args.out)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    cols = ["date", "pm25", "n_stations", "pm25_sd", "pm25_max", "pm25_min"] + WEATHER_KEYS + ["cams_pm25"] + DP_KEYS
+    with open(out_path, "w", newline="") as f:
         w = csv.writer(f)
         w.writerow(cols)
         for d in days:
@@ -151,14 +159,15 @@ def main(argv=None):
                       for k in ("pm25_sd", "pm25_max", "pm25_min")]
             w.writerow([d.isoformat(), "" if pm is None else round(pm, 3), n] + spread
                        + [round(wx[k], 4) if k in wx else "" for k in WEATHER_KEYS]
-                       + [round(cams[d], 3) if d in cams else ""])
+                       + [round(cams[d], 3) if d in cams else ""]
+                       + ["" if (pm is None or dp[k] != dp[k]) else round(dp[k], 3) for dp in [daypart_stats(hourly.get(d))] for k in DP_KEYS])
 
     total = (last - first).days + 1
     have = sum(1 for d in days if d in city)
     meta = {"source": "openaq", "stations": list(coverage), "first": first.isoformat(),
             "last": last.isoformat(), "days_with_pm25": have, "calendar_days": total,
             "min_stations": args.min_stations, "excluded_ranges": args.exclude, "days_excluded": n_excluded, "days_dropped_too_few_stations": dropped}
-    Path("data/daily.meta.json").write_text(json.dumps(meta, indent=2))
+    out_path.with_suffix(".meta.json").write_text(json.dumps(meta, indent=2))
 
     valid_days = sorted(city)
     longest_gap = max(((b - a).days - 1 for a, b in zip(valid_days, valid_days[1:])), default=0)
@@ -177,6 +186,8 @@ def main(argv=None):
                   if sum(1 for d in city if date(y, 10, 15) <= d <= date(y + 1, 2, 15)) >= 90)
     print(f"winters (15 Oct - 15 Feb) with 90+ valid days: {winters}  "
           "(the model is evaluated on winters; 3+ is good, 1 is not enough)")
+    with_dp = sum(1 for d in city if daypart_stats(hourly.get(d))["dp_day"] == daypart_stats(hourly.get(d))["dp_day"])
+    print(f"days with hourly day-part features: {with_dp} of {have} (CPCB daily-file days have none)")
     missing_wx = sum(1 for d in days if d not in weather)
     print(f"days without weather (these days cannot be used for training): {missing_wx}")
     stale = (date.today() - last).days
@@ -184,7 +195,7 @@ def main(argv=None):
         print(f"WARNING: newest PM2.5 day is {stale} days old - live forecasts need fresh data.")
     if have < 400:
         print("WARNING: under ~400 days of data; the model will be weak. Add stations or go further back.")
-    print("wrote data/daily.csv")
+    print(f"wrote {out_path}")
 
 
 if __name__ == "__main__":
