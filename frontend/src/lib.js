@@ -14,7 +14,7 @@ const API = (import.meta.env.VITE_KKH_API || "").replace(/\/$/, "");
 
 async function getJSON(url) {
   const r = await fetch(url, { cache: "no-store" });
-  if (!r.ok) throw new Error(`${url} returned ${r.status}`);
+  if (!r.ok) { const e = new Error(`${url} returned ${r.status}`); e.status = r.status; throw e; }
   return r.json();
 }
 
@@ -25,7 +25,17 @@ export async function loadAll() {
   const stations = getJSON(local("stations")).catch(() => null);
   let forecast, history;
   if (API) {
-    const d = await getJSON(`${API}/forecast`);
+    let d;
+    try {
+      d = await getJSON(`${API}/forecast`);
+    } catch (e) {
+      if (e.status !== 404) throw e;
+      // 404 = the nightly run has not stored a forecast yet (e.g. no fresh air-quality data). Show that plainly:
+      // never fall back to the bundled demo forecast, and drop its per-station "tomorrow" estimates too.
+      const st = await stations;
+      if (st?.stations) st.stations = st.stations.map(({ tomorrow_est, ...rest }) => rest);
+      return { forecast: null, noForecast: true, history: await getJSON(local("history")).catch(() => []), metrics: await metrics, stations: st };
+    }
     forecast = d.forecast;
     history = d.history;
     if (!history || history.filter((h) => h.actual != null).length < 5) {

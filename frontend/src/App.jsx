@@ -10,6 +10,7 @@ import AreaCard from "./components/AreaCard.jsx";
 import TrendChart from "./components/TrendChart.jsx";
 import MetricsCard from "./components/MetricsCard.jsx";
 import AirHero from "./components/AirHero.jsx";
+import NoForecast from "./components/NoForecast.jsx";
 import ThemeToggle from "./components/ThemeToggle.jsx";
 import { useTheme } from "./theme.js";
 
@@ -59,11 +60,17 @@ export default function App() {
 
       {data && (
         <main className="wrap">
-          <AirHero forecast={f} stationsDate={data.stations?.date} />
-          <section className="hero">
-            <ForecastCard forecast={f} />
-            <DecisionCard guidance={f.guidance} category={f.category} />
-          </section>
+          {data.noForecast ? (
+            <NoForecast />
+          ) : (
+            <>
+              <AirHero forecast={f} stationsDate={data.stations?.date} />
+              <section className="hero">
+                <ForecastCard forecast={f} />
+                <DecisionCard guidance={f.guidance} category={f.category} />
+              </section>
+            </>
+          )}
 
           <StatTiles stations={data.stations} />
 

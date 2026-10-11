@@ -45,6 +45,7 @@ main { display: grid; gap: 16px; padding-top: 12px; padding-bottom: 8px; }
 .range-line { margin: 0 0 4px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; }
 .range-label { font-weight: 700; } .range-to { color: var(--muted); } .range-pm { margin: 0; }
 .decision-word { font-size: 2.8rem; font-weight: 800; letter-spacing: .02em; line-height: 1.1; }
+.decision-word.none { color: var(--muted); }
 .decision-word.GO { color: var(--go); } .decision-word.CAUTION { color: var(--caution); } .decision-word.INDOOR { color: var(--indoor); }
 .headline { font-weight: 700; margin: 6px 0 2px; }
 

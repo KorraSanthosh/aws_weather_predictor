@@ -30,7 +30,7 @@ Status on 11 October 2026.
 | SAM stack and Lambda package | **Deployed** on 11 Oct 2026 (stack `kal-ki-hawa`, ap-southeast-2, CREATE_COMPLETE). The deployed package was checked (numpy, scipy and xgboost 3.4.1 import) and the SNS subscription is confirmed |
 | First live nightly run (OpenAQ and Open-Meteo calls from inside the Lambda, forecast row, alert e-mail) | **Attempted on 11 Oct 2026; the function refused to forecast.** Its freshness check stopped it: the newest valid PM2.5 day it could see was 7 Oct, too old to forecast from. OpenAQ had published nothing for these 10 stations since 7 Oct 20:00 IST, neither in its API nor in its open-data archive. No forecast has been stored, so the dashboard shows "No live forecast" until fresh data arrives |
 | Forward test, winter 2026-27 | **Set up, not started.** Shadow logging of V2 and the hybrid is deployed and V1 still serves. Runs on 11-13 Oct are rehearsal; the scored window opens with the run on 14 Oct 23:00 IST (target date 15 Oct) and is not analysed before 16 Feb 2027 (`FORWARD_TEST_OPERATIONS.md`) |
-| Dashboard hosting (Amplify) | Hosted on AWS Amplify at https://live.d1fte73g29q7ow.amplifyapp.com by a manual zip upload; this is not part of the stack. `web/config.js` in the repo is empty, so the repo copy runs in offline demo mode, while the hosted copy sets `KKH_API` to the stack's `ApiUrl` |
+| Dashboard hosting (Amplify) | Hosted on AWS Amplify at https://live.d1fte73g29q7ow.amplifyapp.com by a manual zip upload of the React dashboard (`frontend/`, built with `VITE_KKH_API` set to the stack's `ApiUrl`); this is not part of the stack. It has English and Hindi, light, dark and system modes, and it shows "No live forecast" while the API has none. `web/` is the plain, dependency-free fallback page (its `config.js` is empty, so it runs in offline demo mode) |
 
 Synthetic results are only there to prove the code runs. **Never show synthetic numbers as real.** The site shows a
 "DEMO DATA" banner whenever the data source is synthetic.
@@ -126,6 +126,7 @@ no `requirements.txt` with an exclusion list that contains `*.so`, so it silentl
 and the Lambda then fails on `import numpy`. (The upload is then ~15 MB instead of ~60 MB.) `sam deploy` zips the folder as it is.
 
 Put the `ApiUrl` output into `web/config.js`, then host the `web/` folder on AWS Amplify (drag-and-drop deploy).
+For the React dashboard instead: `cd frontend && VITE_KKH_API=<ApiUrl> npm run build`, then host the contents of `frontend/dist/` the same way.
 Confirm the SNS subscription email. For a normal (non forward-test) setup you may invoke the forecast function once by hand to create the
 first forecast; during the forward test do not (see `FORWARD_TEST_OPERATIONS.md`).
 
