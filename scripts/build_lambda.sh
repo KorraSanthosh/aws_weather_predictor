@@ -56,4 +56,5 @@ fi
 
 find "$OUT" -name "__pycache__" -type d -prune -exec rm -rf {} +
 du -sh "$OUT"
-echo "Built $OUT. Next:  sam build --template template.yaml  &&  sam deploy --guided"
+echo "Built $OUT. Next:  sam deploy --guided --template-file template.yaml"
+echo "Do NOT run 'sam build': it drops every *.so file from this folder (no requirements.txt), so numpy/scipy/xgboost would not import in Lambda."

@@ -119,8 +119,16 @@ forecast (a `#late#` provenance record explains why). Test only after 23:00 IST,
 2. `bash scripts/validate_working_copy.sh` – every line must PASS.
 3. Optional but recommended: `python scripts/check_hourly_feed.py` near 23:00 IST (section 4A).
 4. `SHADOW=1 bash scripts/build_lambda.sh`, then open `build/lambda/build_info.json`: `shadow_package` must be `true`. The script also stops with an error unless `xgboost_cpu-3.4.1.dist-info` is in the package.
-5. `sam build --template template.yaml` and `sam deploy --guided`. Use the **new** OpenAQ key (the old one was exposed). Set
-   `ShadowVersions` = `v1_25_baseline,v2_35_candidate,v3_hybrid`; do not add a `MODEL_VERSION` variable.
+5. `sam deploy --guided --template-file template.yaml`. **Do not run `sam build`**: with no `requirements.txt` it copies the folder with an
+   exclusion list that contains `*.so`, which removes the compiled parts of numpy/scipy/xgboost (upload ~15 MB instead of ~60 MB; the Lambda
+   would fail on `import numpy`). Use the **new** OpenAQ key (the old one was exposed). Set
+   `ShadowVersions` = `v1_25_baseline,v2_35_candidate,v3_hybrid`; do not add a `MODEL_VERSION` variable. The deploy upload line must show
+   about 60 MB. Entering the key in a hidden prompt gives no feedback; type it with `read -rs KEY; echo ${#KEY}` first (must print 64) and check it with
+   `curl -s -o /dev/null -w '%{http_code}' -H "X-API-Key: $KEY" https://api.openaq.org/v3/sensors/12234787` (must print 200), then pass
+   `--parameter-overrides "OpenAQApiKey=$KEY" ...` to `sam deploy`.
+5b. Verify the deployed package (no side effects, no key shown): `aws lambda get-function-configuration --function-name <ForecastFunction>` must show
+   Handler `forward_logger.handler`, CodeSize ~60.5 MB, `SHADOW_VERSIONS` set, no `MODEL_VERSION`, and `length(OPENAQ_API_KEY)` = 64; download the zip
+   (`aws lambda get-function --query Code.Location`) and import numpy, scipy, xgboost and load both models with `python3.12`.
 6. The schedule fires at 23:00 IST. After the first run: `python scripts/forward_ops.py ops --table <TableName> --region <region>`
    and `... reproduce ...` (section 6). Runs on 11–13 Oct are rehearsal (targets 12–14 Oct); the window opens with the run on
    14 Oct 23:00 IST (target 15 Oct).

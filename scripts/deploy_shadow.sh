@@ -7,7 +7,8 @@
 #   2. runs scripts/validate_working_copy.sh - the only FAIL allowed is "local commits not on origin/main"
 #   3. commits the forward-logging work on feature/forward-logging (two commits; NOTHING is pushed)
 #   4. SHADOW=1 build of build/lambda with xgboost-cpu 3.4.1, then checks build_info.json
-#   5. sam build, then "sam deploy --guided": you answer the questions and you confirm the change set
+#   5. "sam deploy --guided --template-file template.yaml": you answer the questions and you confirm the change set
+#      (no "sam build": it would drop every *.so file from build/lambda and the Lambda could not import numpy)
 # It never sets MODEL_VERSION (V1 stays the served model) and never edits a model file.
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -88,8 +89,7 @@ PYCHECK
 ls build/lambda | grep -q '^xgboost_cpu-3\.4\.1\.dist-info$' || die "xgboost-cpu 3.4.1 is not in build/lambda"
 echo "ok: xgboost-cpu 3.4.1 is in the package"
 
-step "5. sam build, then sam deploy --guided (you answer; you confirm the change set)"
-sam build --template template.yaml || die "sam build failed.  If it only complains about python3.12, either install it (brew install python@3.12) or run 'sam build --use-container' (needs Docker), then re-run this script."
+step "5. sam deploy --guided (you answer; you confirm the change set).  No 'sam build' on purpose."
 cat <<'ANSWERS'
 
 Answers for 'sam deploy --guided' (everything else: press Enter):
@@ -103,7 +103,9 @@ Answers for 'sam deploy --guided' (everything else: press Enter):
   'Save arguments to configuration file' -> y  (samconfig.toml is git-ignored; the key is not saved)
 
 ANSWERS
-sam deploy --guided --template-file .aws-sam/build/template.yaml
+sam deploy --guided --template-file template.yaml
+echo
+echo "Check the upload line above said ~60 MB (60,5xx,xxx bytes). If it said ~15 MB the compiled libraries were lost: do not trust that deploy."
 
 step "Done. Next (see FORWARD_TEST_OPERATIONS.md section 6)"
 echo "Do NOT invoke the Lambda by hand during the day.  After the 23:00 IST run:"
