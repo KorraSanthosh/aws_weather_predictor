@@ -82,6 +82,17 @@ gap (expect roughly 60-64% category accuracy live). Reproduce with `python model
 The Lambda now fetches 16 days of history so any PM2.5 lag up to 14 days is available live (guarded by a test).
 CPCB portal daily files go in `data/raw/cpcb/` (`build_dataset.py` reads them).
 
+## Extra NCR / upwind city data (tested, no gain)
+`experiments/regional_cities/` adds hourly PM2.5 from 44 government stations around Delhi (NCR towns, Haryana, Punjab, east UP;
+public OpenAQ archive, no key) as extra inputs and asks whether next-day Delhi accuracy improves. **It does not**, on calendar 2025
+(344 days) or winter 2025-26 (104 days). Exact-category accuracy of the V1 default, averaged over five training seeds: 62.0 % / 64.4 %
+without the regional inputs, 62.3 % / 64.2 % with them, and 61.7 % / 64.6 % with 12 placebo columns (real regional numbers taken from
+a random other day of the same month). A single seed can move these by several points (winter V1 + regional ranges from 62.5 % to
+67.3 % across seeds), no regional-vs-control interval excludes zero, the averaged MAE change is about zero and the Hybrid gets about
+3 % worse in winter. The archive has no Indian government data for 2023-24, so the regional inputs are blank there. Protocol and
+pass/fail rule were written first (`config.json`); results and caveats are in `experiments/regional_cities/report.md`. The deployed
+model, Lambda and dashboard are unchanged.
+
 ## Prediction range (90 %)
 
 Under the forecast the dashboard shows a **likely range**, e.g. "Good to Moderate (PM2.5 30–81 µg/m³)". It shows how

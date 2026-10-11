@@ -1,0 +1,910 @@
+{
+ "rules": "(declared in config.json):\n  * Delhi stations are NEVER regional: the Delhi city mean (the target) must stay Delhi only.\n  * only government monitoring networks: names ending in HSPCB, UPPCB, PPCB, RSPCB or CPCC\n  * coverage: >= 365 daily files in 2018-2022 AND >= 150 in 2025-26 (so the station exists in both the training years and the test years)\n  * group by distance / bearing from central Delhi (28.6139 N, 77.2090 E)",
+ "stations": [
+  {
+   "id": 7283,
+   "name": "MD University, Rohtak - HSPCB-7283",
+   "lat": 28.52123,
+   "lon": 76.37138,
+   "board": "HSPCB",
+   "dist_km": 82.4,
+   "bearing": 263,
+   "group": "haryana_nw",
+   "files_2018_22": 714,
+   "files_2025_26": 335
+  },
+  {
+   "id": 10725,
+   "name": "Mini Secretariat, Charkhi Dadri - HSPCB-10725",
+   "lat": 28.593883,
+   "lon": 76.270653,
+   "board": "HSPCB",
+   "dist_km": 91.6,
+   "bearing": 269,
+   "group": "haryana_nw",
+   "files_2018_22": 571,
+   "files_2025_26": 378
+  },
+  {
+   "id": 6958,
+   "name": "Sector-18, Panipat - HSPCB-6958",
+   "lat": 29.497973,
+   "lon": 76.993331,
+   "board": "HSPCB",
+   "dist_km": 100.5,
+   "bearing": 348,
+   "group": "haryana_nw",
+   "files_2018_22": 829,
+   "files_2025_26": 307
+  },
+  {
+   "id": 6944,
+   "name": "H.B. Colony, Bhiwani - HSPCB-6944",
+   "lat": 28.806223,
+   "lon": 76.141105,
+   "board": "HSPCB",
+   "dist_km": 106.3,
+   "bearing": 282,
+   "group": "haryana_nw",
+   "files_2018_22": 856,
+   "files_2025_26": 339
+  },
+  {
+   "id": 6963,
+   "name": "Police Lines, Jind - HSPCB-6963",
+   "lat": 29.307814,
+   "lon": 76.337619,
+   "board": "HSPCB",
+   "dist_km": 114.6,
+   "bearing": 313,
+   "group": "haryana_nw",
+   "files_2018_22": 884,
+   "files_2025_26": 339
+  },
+  {
+   "id": 10910,
+   "name": "Sector-12, Karnal - HSPCB-10910",
+   "lat": 29.6953,
+   "lon": 77.0027,
+   "board": "HSPCB",
+   "dist_km": 121.9,
+   "bearing": 351,
+   "group": "haryana_nw",
+   "files_2018_22": 760,
+   "files_2025_26": 343
+  },
+  {
+   "id": 7282,
+   "name": "Sector-7, Kurukshetra - HSPCB-7282",
+   "lat": 29.966942,
+   "lon": 76.875879,
+   "board": "HSPCB",
+   "dist_km": 153.9,
+   "bearing": 348,
+   "group": "haryana_nw",
+   "files_2018_22": 851,
+   "files_2025_26": 348
+  },
+  {
+   "id": 6935,
+   "name": "Urban Estate-II, Hisar - HSPCB-6935",
+   "lat": 29.14056,
+   "lon": 75.744941,
+   "board": "HSPCB",
+   "dist_km": 154.1,
+   "bearing": 293,
+   "group": "haryana_nw",
+   "files_2018_22": 902,
+   "files_2025_26": 297
+  },
+  {
+   "id": 6969,
+   "name": "Huda Sector, Fatehabad - HSPCB-6969",
+   "lat": 29.503664,
+   "lon": 75.467934,
+   "board": "HSPCB",
+   "dist_km": 196.0,
+   "bearing": 301,
+   "group": "haryana_nw",
+   "files_2018_22": 769,
+   "files_2025_26": 331
+  },
+  {
+   "id": 6964,
+   "name": "Patti Mehar, Ambala - HSPCB-6964",
+   "lat": 30.379589,
+   "lon": 76.778328,
+   "board": "HSPCB",
+   "dist_km": 200.7,
+   "bearing": 348,
+   "group": "haryana_nw",
+   "files_2018_22": 830,
+   "files_2025_26": 350
+  },
+  {
+   "id": 2583,
+   "name": "Sector-6, Panchkula - HSPCB -2583",
+   "lat": 30.7057778,
+   "lon": 76.8531805555555,
+   "board": "HSPCB",
+   "dist_km": 235.1,
+   "bearing": 352,
+   "group": "haryana_nw",
+   "files_2018_22": 1032,
+   "files_2025_26": 360
+  },
+  {
+   "id": 6952,
+   "name": "F-Block, Sirsa - HSPCB-6952",
+   "lat": 29.5364,
+   "lon": 75.0158,
+   "board": "HSPCB",
+   "dist_km": 236.5,
+   "bearing": 296,
+   "group": "haryana_nw",
+   "files_2018_22": 770,
+   "files_2025_26": 331
+  },
+  {
+   "id": 10914,
+   "name": "Sector-25, Chandigarh - CPCC-10914",
+   "lat": 30.751462,
+   "lon": 76.762879,
+   "board": "CPCC",
+   "dist_km": 241.6,
+   "bearing": 350,
+   "group": "haryana_nw",
+   "files_2018_22": 777,
+   "files_2025_26": 547
+  },
+  {
+   "id": 6980,
+   "name": "Sector-1, Noida - UPPCB-6980",
+   "lat": 28.5898,
+   "lon": 77.3101,
+   "board": "UPPCB",
+   "dist_km": 10.2,
+   "bearing": 105,
+   "group": "ncr_near",
+   "files_2018_22": 772,
+   "files_2025_26": 579
+  },
+  {
+   "id": 5598,
+   "name": "Sector - 125, Noida - UPPCB-5598",
+   "lat": 28.5447608,
+   "lon": 77.3231257,
+   "board": "UPPCB",
+   "dist_km": 13.5,
+   "bearing": 125,
+   "group": "ncr_near",
+   "files_2018_22": 1006,
+   "files_2025_26": 578
+  },
+  {
+   "id": 6924,
+   "name": "Indirapuram, Ghaziabad - UPPCB-6924",
+   "lat": 28.646233,
+   "lon": 77.358075,
+   "board": "UPPCB",
+   "dist_km": 15.0,
+   "bearing": 76,
+   "group": "ncr_near",
+   "files_2018_22": 850,
+   "files_2025_26": 578
+  },
+  {
+   "id": 5665,
+   "name": "Vasundhara, Ghaziabad - UPPCB-5665",
+   "lat": 28.6603346,
+   "lon": 77.3572563,
+   "board": "UPPCB",
+   "dist_km": 15.4,
+   "bearing": 70,
+   "group": "ncr_near",
+   "files_2018_22": 1086,
+   "files_2025_26": 584
+  },
+  {
+   "id": 7005,
+   "name": "Loni, Ghaziabad - UPPCB-7005",
+   "lat": 28.757294,
+   "lon": 77.278792,
+   "board": "UPPCB",
+   "dist_km": 17.3,
+   "bearing": 23,
+   "group": "ncr_near",
+   "files_2018_22": 855,
+   "files_2025_26": 573
+  },
+  {
+   "id": 6988,
+   "name": "Sector-116, Noida - UPPCB-6988",
+   "lat": 28.56923,
+   "lon": 77.393848,
+   "board": "UPPCB",
+   "dist_km": 18.7,
+   "bearing": 105,
+   "group": "ncr_near",
+   "files_2018_22": 860,
+   "files_2025_26": 566
+  },
+  {
+   "id": 10900,
+   "name": "Teri Gram, Gurugram - HSPCB-10900",
+   "lat": 28.4275,
+   "lon": 77.1465,
+   "board": "HSPCB",
+   "dist_km": 21.6,
+   "bearing": 196,
+   "group": "ncr_near",
+   "files_2018_22": 619,
+   "files_2025_26": 378
+  },
+  {
+   "id": 10820,
+   "name": "Sector 30, Faridabad - HSPCB-10820",
+   "lat": 28.4417,
+   "lon": 77.3217,
+   "board": "HSPCB",
+   "dist_km": 22.1,
+   "bearing": 150,
+   "group": "ncr_near",
+   "files_2018_22": 494,
+   "files_2025_26": 373
+  },
+  {
+   "id": 6986,
+   "name": "Knowledge Park - V, Greater Noida - UPPCB-6986",
+   "lat": 28.557054,
+   "lon": 77.453663,
+   "board": "UPPCB",
+   "dist_km": 24.7,
+   "bearing": 105,
+   "group": "ncr_near",
+   "files_2018_22": 774,
+   "files_2025_26": 585
+  },
+  {
+   "id": 10919,
+   "name": "Sanjay Nagar, Ghaziabad - UPPCB-10919",
+   "lat": 28.685382,
+   "lon": 77.453839,
+   "board": "UPPCB",
+   "dist_km": 25.2,
+   "bearing": 72,
+   "group": "ncr_near",
+   "files_2018_22": 739,
+   "files_2025_26": 579
+  },
+  {
+   "id": 10825,
+   "name": "Sector-51, Gurugram - HSPCB-10825",
+   "lat": 28.4227,
+   "lon": 77.0667,
+   "board": "HSPCB",
+   "dist_km": 25.4,
+   "bearing": 213,
+   "group": "ncr_near",
+   "files_2018_22": 532,
+   "files_2025_26": 403
+  },
+  {
+   "id": 301,
+   "name": "Vikas Sadan, Gurugram - HSPCB-301",
+   "lat": 28.4501238,
+   "lon": 77.0263051,
+   "board": "HSPCB",
+   "dist_km": 25.5,
+   "bearing": 224,
+   "group": "ncr_near",
+   "files_2018_22": 1000,
+   "files_2025_26": 318
+  },
+  {
+   "id": 10920,
+   "name": "New Industrial Town, Faridabad - HSPCB-10920",
+   "lat": 28.39072,
+   "lon": 77.30059,
+   "board": "HSPCB",
+   "dist_km": 26.4,
+   "bearing": 160,
+   "group": "ncr_near",
+   "files_2018_22": 450,
+   "files_2025_26": 395
+  },
+  {
+   "id": 6936,
+   "name": "Arya Nagar, Bahadurgarh - HSPCB-6936",
+   "lat": 28.6701,
+   "lon": 76.9254,
+   "board": "HSPCB",
+   "dist_km": 28.4,
+   "bearing": 283,
+   "group": "ncr_near",
+   "files_2018_22": 769,
+   "files_2025_26": 350
+  },
+  {
+   "id": 10908,
+   "name": "Sector 11, Faridabad - HSPCB-10908",
+   "lat": 28.376058,
+   "lon": 77.315741,
+   "board": "HSPCB",
+   "dist_km": 28.4,
+   "bearing": 158,
+   "group": "ncr_near",
+   "files_2018_22": 399,
+   "files_2025_26": 389
+  },
+  {
+   "id": 6978,
+   "name": "Knowledge Park - III, Greater Noida - UPPCB-6978",
+   "lat": 28.47272,
+   "lon": 77.482,
+   "board": "UPPCB",
+   "dist_km": 30.9,
+   "bearing": 120,
+   "group": "ncr_near",
+   "files_2018_22": 912,
+   "files_2025_26": 580
+  },
+  {
+   "id": 6972,
+   "name": "Nathu Colony, Ballabgarh - HSPCB-6972",
+   "lat": 28.3419248,
+   "lon": 77.319699,
+   "board": "HSPCB",
+   "dist_km": 32.1,
+   "bearing": 160,
+   "group": "ncr_near",
+   "files_2018_22": 777,
+   "files_2025_26": 353
+  },
+  {
+   "id": 6953,
+   "name": "Sector-2 IMT, Manesar - HSPCB-6953",
+   "lat": 28.360699,
+   "lon": 76.93609,
+   "board": "HSPCB",
+   "dist_km": 38.8,
+   "bearing": 224,
+   "group": "ncr_near",
+   "files_2018_22": 883,
+   "files_2025_26": 356
+  },
+  {
+   "id": 8319,
+   "name": "Anand Vihar, Hapur - UPPCB-8319",
+   "lat": 28.725645,
+   "lon": 77.749675,
+   "board": "UPPCB",
+   "dist_km": 54.2,
+   "bearing": 77,
+   "group": "ncr_near",
+   "files_2018_22": 762,
+   "files_2025_26": 562
+  },
+  {
+   "id": 5544,
+   "name": "Model Town, Patiala - PPCB-5544",
+   "lat": 30.349388,
+   "lon": 76.366642,
+   "board": "PPCB",
+   "dist_km": 209.5,
+   "bearing": 337,
+   "group": "punjab",
+   "files_2018_22": 888,
+   "files_2025_26": 580
+  },
+  {
+   "id": 5625,
+   "name": "RIMT University, Mandi Gobindgarh - PPCB-5625",
+   "lat": 30.649961,
+   "lon": 76.331442,
+   "board": "PPCB",
+   "dist_km": 241.8,
+   "bearing": 340,
+   "group": "punjab",
+   "files_2018_22": 946,
+   "files_2025_26": 563
+  },
+  {
+   "id": 6940,
+   "name": "Kalal Majra, Khanna - PPCB-6940",
+   "lat": 30.736056,
+   "lon": 76.209694,
+   "board": "PPCB",
+   "dist_km": 255.0,
+   "bearing": 338,
+   "group": "punjab",
+   "files_2018_22": 883,
+   "files_2025_26": 583
+  },
+  {
+   "id": 6939,
+   "name": "Hardev Nagar, Bathinda - PPCB-6939",
+   "lat": 30.233011,
+   "lon": 74.907758,
+   "board": "PPCB",
+   "dist_km": 286.5,
+   "bearing": 309,
+   "group": "punjab",
+   "files_2018_22": 847,
+   "files_2025_26": 579
+  },
+  {
+   "id": 5569,
+   "name": "Punjab Agricultural University, Ludhiana - PPCB-5569",
+   "lat": 30.9028,
+   "lon": 75.8086,
+   "board": "PPCB",
+   "dist_km": 288.2,
+   "bearing": 332,
+   "group": "punjab",
+   "files_2018_22": 1052,
+   "files_2025_26": 559
+  },
+  {
+   "id": 5542,
+   "name": "Civil Line, Jalandhar - PPCB-5542",
+   "lat": 31.321907,
+   "lon": 75.578914,
+   "board": "PPCB",
+   "dist_km": 339.6,
+   "bearing": 333,
+   "group": "punjab",
+   "files_2018_22": 909,
+   "files_2025_26": 584
+  },
+  {
+   "id": 5551,
+   "name": "Golden Temple, Amritsar - PPCB-5551",
+   "lat": 31.62,
+   "lon": 74.876512,
+   "board": "PPCB",
+   "dist_km": 402.5,
+   "bearing": 327,
+   "group": "punjab",
+   "files_2018_22": 959,
+   "files_2025_26": 574
+  },
+  {
+   "id": 6976,
+   "name": "Jai Bhim Nagar, Meerut - UPPCB-6976",
+   "lat": 28.9535882,
+   "lon": 77.7622941,
+   "board": "UPPCB",
+   "dist_km": 65.8,
+   "bearing": 55,
+   "group": "up_east",
+   "files_2018_22": 625,
+   "files_2025_26": 572
+  },
+  {
+   "id": 6985,
+   "name": "Yamunapuram, Bulandshahr - UPPCB-6985",
+   "lat": 28.406963,
+   "lon": 77.849831,
+   "board": "UPPCB",
+   "dist_km": 66.7,
+   "bearing": 110,
+   "group": "up_east",
+   "files_2018_22": 941,
+   "files_2025_26": 585
+  },
+  {
+   "id": 7833,
+   "name": "Ganga Nagar, Meerut - UPPCB-7833",
+   "lat": 28.999264,
+   "lon": 77.7590354,
+   "board": "UPPCB",
+   "dist_km": 68.6,
+   "bearing": 51,
+   "group": "up_east",
+   "files_2018_22": 765,
+   "files_2025_26": 576
+  },
+  {
+   "id": 7720,
+   "name": "Pallavpuram Phase 2, Meerut - UPPCB-7720",
+   "lat": 29.06351,
+   "lon": 77.709723,
+   "board": "UPPCB",
+   "dist_km": 69.8,
+   "bearing": 44,
+   "group": "up_east",
+   "files_2018_22": 760,
+   "files_2025_26": 584
+  },
+  {
+   "id": 6923,
+   "name": "New Mandi, Muzaffarnagar - UPPCB-6923",
+   "lat": 29.4723508,
+   "lon": 77.7194031,
+   "board": "UPPCB",
+   "dist_km": 107.6,
+   "bearing": 27,
+   "group": "up_east",
+   "files_2018_22": 901,
+   "files_2025_26": 584
+  }
+ ],
+ "dropped": [
+  {
+   "id": 15,
+   "name": "IGI Airport-15",
+   "why": "Delhi"
+  },
+  {
+   "id": 16,
+   "name": "Civil Lines-16",
+   "why": "Delhi"
+  },
+  {
+   "id": 17,
+   "name": "R K Puram, Delhi - DPCC-17",
+   "why": "Delhi"
+  },
+  {
+   "id": 50,
+   "name": "Punjabi Bagh, Delhi - DPCC-50",
+   "why": "Delhi"
+  },
+  {
+   "id": 103,
+   "name": "Income Tax Office, Delhi - CPCB-103",
+   "why": "Delhi"
+  },
+  {
+   "id": 235,
+   "name": "Anand Vihar, Delhi - DPCC-235",
+   "why": "Delhi"
+  },
+  {
+   "id": 236,
+   "name": "Mandir Marg, Delhi - DPCC-236",
+   "why": "Delhi"
+  },
+  {
+   "id": 2597,
+   "name": "US Diplomatic Post: New Delhi-2597",
+   "why": "Delhi"
+  },
+  {
+   "id": 5404,
+   "name": "Pusa, Delhi - IMD-3379470",
+   "why": "Delhi"
+  },
+  {
+   "id": 5509,
+   "name": "Anand Vihar, Delhi - DPCC-5509",
+   "why": "Delhi"
+  },
+  {
+   "id": 5540,
+   "name": "Punjabi Bagh, Delhi - DPCC-5540",
+   "why": "Delhi"
+  },
+  {
+   "id": 5541,
+   "name": "Burari Crossing, Delhi - IMD-5541",
+   "why": "Delhi"
+  },
+  {
+   "id": 5552,
+   "name": "MD University, Rohtak - HSPCB-5552",
+   "why": "coverage 323 days in 2018-22, 0 in 2025-26"
+  },
+  {
+   "id": 5570,
+   "name": "Aya Nagar, Delhi - IMD-5570",
+   "why": "Delhi"
+  },
+  {
+   "id": 5581,
+   "name": "Pusa, New Delhi - IMD-5581",
+   "why": "Delhi"
+  },
+  {
+   "id": 5586,
+   "name": "Sirifort, Delhi - CPCB-5586",
+   "why": "Delhi"
+  },
+  {
+   "id": 5588,
+   "name": "RIICO Ind. Area III, Bhiwadi - RSPCB-5588",
+   "why": "outside every group (dist 58 km, bearing 216)"
+  },
+  {
+   "id": 5610,
+   "name": "North Campus, DU, Delhi - IMD-5610",
+   "why": "Delhi"
+  },
+  {
+   "id": 5613,
+   "name": "ITO, Delhi - CPCB-5613",
+   "why": "Delhi"
+  },
+  {
+   "id": 5616,
+   "name": "Sector - 62, Noida - IMD-5616",
+   "why": "not a government network station (HSPCB/UPPCB/PPCB/RSPCB/CPCC)"
+  },
+  {
+   "id": 5617,
+   "name": "Sector- 16A, Faridabad - HSPCB-5617",
+   "why": "coverage 870 days in 2018-22, 0 in 2025-26"
+  },
+  {
+   "id": 5622,
+   "name": "NSIT Dwarka, Delhi - CPCB-5622",
+   "why": "Delhi"
+  },
+  {
+   "id": 5626,
+   "name": "DTU, Delhi - CPCB-5626",
+   "why": "Delhi"
+  },
+  {
+   "id": 5627,
+   "name": "CRRI Mathura Road, Delhi - IMD-5627",
+   "why": "Delhi"
+  },
+  {
+   "id": 5630,
+   "name": "Shadipur, Delhi - CPCB-5630",
+   "why": "Delhi"
+  },
+  {
+   "id": 5634,
+   "name": "Lodhi Road, Delhi - IMD-5634",
+   "why": "Delhi"
+  },
+  {
+   "id": 5639,
+   "name": "R K Puram, New Delhi - DPCC-5639",
+   "why": "Delhi"
+  },
+  {
+   "id": 5641,
+   "name": "Mandir Marg, New Delhi - DPCC-5641",
+   "why": "Delhi"
+  },
+  {
+   "id": 5650,
+   "name": "IGI Airport (T3), Delhi - IMD-5650",
+   "why": "Delhi"
+  },
+  {
+   "id": 5654,
+   "name": "IHBAS, Dilshad Garden,New Delhi - CPCB-5654",
+   "why": "Delhi"
+  },
+  {
+   "id": 5755,
+   "name": "Major Dhyan Chand National Stadium, Delhi - DPCC-5755",
+   "why": "Delhi"
+  },
+  {
+   "id": 6314,
+   "name": "NISE Gwal Pahari, Gurugram - IMD-6314",
+   "why": "not a government network station (HSPCB/UPPCB/PPCB/RSPCB/CPCC)"
+  },
+  {
+   "id": 6356,
+   "name": "Pusa, Delhi - IMD-6356",
+   "why": "Delhi"
+  },
+  {
+   "id": 6357,
+   "name": "Punjabi Bagh, Delhi - DPCC-6357",
+   "why": "Delhi"
+  },
+  {
+   "id": 6358,
+   "name": "Mandir Marg, Delhi - DPCC-6358",
+   "why": "Delhi"
+  },
+  {
+   "id": 6359,
+   "name": "IHBAS, Dilshad Garden, Delhi - CPCB-6359",
+   "why": "Delhi"
+  },
+  {
+   "id": 6442,
+   "name": "Ratanpura, Rupnagar - Ambuja Cements-6442",
+   "why": "not a government network station (HSPCB/UPPCB/PPCB/RSPCB/CPCC)"
+  },
+  {
+   "id": 6929,
+   "name": "Major Dhyan Chand National Stadium, Delhi - DPCC-6929",
+   "why": "Delhi"
+  },
+  {
+   "id": 6930,
+   "name": "Gobind Pura, Yamuna Nagar - HSPCB-6930",
+   "why": "outside every group (dist 171 km, bearing 3)"
+  },
+  {
+   "id": 6931,
+   "name": "Dwarka-Sector 8, Delhi - DPCC -6931",
+   "why": "Delhi"
+  },
+  {
+   "id": 6932,
+   "name": "Alipur, Delhi - DPCC-6932",
+   "why": "Delhi"
+  },
+  {
+   "id": 6934,
+   "name": "Dr. Karni Singh Shooting Range, Delhi - DPCC-6934",
+   "why": "Delhi"
+  },
+  {
+   "id": 6938,
+   "name": "Vivek Vihar, Delhi - DPCC-6938",
+   "why": "Delhi"
+  },
+  {
+   "id": 6947,
+   "name": "General Hospital, Mandikhera - HSPCB-6947",
+   "why": "outside every group (dist 82 km, bearing 195)"
+  },
+  {
+   "id": 6949,
+   "name": "Municipal Corporation Office, Dharuhera -  HSPCB-6949",
+   "why": "outside every group (dist 60 km, bearing 222)"
+  },
+  {
+   "id": 6951,
+   "name": "Murthal, Sonipat - HSPCB-6951",
+   "why": "coverage 193 days in 2018-22, 319 in 2025-26"
+  },
+  {
+   "id": 6957,
+   "name": "Jawaharlal Nehru Stadium, Delhi - DPCC-6957",
+   "why": "Delhi"
+  },
+  {
+   "id": 6960,
+   "name": "Patparganj, Delhi - DPCC-6960",
+   "why": "Delhi"
+  },
+  {
+   "id": 6970,
+   "name": "Shastri Nagar, Narnaul - HSPCB-6970",
+   "why": "outside every group (dist 124 km, bearing 240)"
+  },
+  {
+   "id": 6971,
+   "name": "Rishi Nagar, Kaithal - HSPCB-6971",
+   "why": "coverage 57 days in 2018-22, 332 in 2025-26"
+  },
+  {
+   "id": 6979,
+   "name": "New Collectorate, Baghpat - UPPCB-6979",
+   "why": "coverage 741 days in 2018-22, 0 in 2025-26"
+  },
+  {
+   "id": 7044,
+   "name": "R K Puram, Delhi - DPCC-7044",
+   "why": "Delhi"
+  },
+  {
+   "id": 7280,
+   "name": "Shyam Nagar, Palwal - HSPCB-7280",
+   "why": "coverage 172 days in 2018-22, 350 in 2025-26"
+  },
+  {
+   "id": 7281,
+   "name": "Shyam Nagar, Palwal - HSPCB-7281",
+   "why": "coverage 677 days in 2018-22, 0 in 2025-26"
+  },
+  {
+   "id": 8118,
+   "name": "US Diplomatic Post: New Delhi-8118",
+   "why": "Delhi"
+  },
+  {
+   "id": 8235,
+   "name": "Jahangirpuri, Delhi - DPCC-8235",
+   "why": "Delhi"
+  },
+  {
+   "id": 8239,
+   "name": "Okhla Phase-2, Delhi - DPCC-8239",
+   "why": "Delhi"
+  },
+  {
+   "id": 8365,
+   "name": "Nehru Nagar, Delhi - DPCC-8365",
+   "why": "Delhi"
+  },
+  {
+   "id": 8472,
+   "name": "Bawana, Delhi - DPCC-8472",
+   "why": "Delhi"
+  },
+  {
+   "id": 8475,
+   "name": "Sonia Vihar, Delhi - DPCC-8475",
+   "why": "Delhi"
+  },
+  {
+   "id": 8664,
+   "name": "US Diplomatic Post: Lahore-8664",
+   "why": "Delhi"
+  },
+  {
+   "id": 8917,
+   "name": "Ashok Vihar, Delhi - DPCC-8917",
+   "why": "Delhi"
+  },
+  {
+   "id": 10484,
+   "name": "Sri Aurobindo Marg, Delhi - DPCC-10484",
+   "why": "Delhi"
+  },
+  {
+   "id": 10485,
+   "name": "Narela, Delhi - DPCC-10485",
+   "why": "Delhi"
+  },
+  {
+   "id": 10486,
+   "name": "Mundka, Delhi - DPCC-10486",
+   "why": "Delhi"
+  },
+  {
+   "id": 10487,
+   "name": "Anand Vihar, Delhi - DPCC-10487",
+   "why": "Delhi"
+  },
+  {
+   "id": 10488,
+   "name": "Najafgarh, Delhi - DPCC-10488",
+   "why": "Delhi"
+  },
+  {
+   "id": 10489,
+   "name": "ITO, Delhi - CPCB-10489",
+   "why": "Delhi"
+  },
+  {
+   "id": 10695,
+   "name": "Ratanpura, Rupnagar - Ambuja Cements-10695",
+   "why": "not a government network station (HSPCB/UPPCB/PPCB/RSPCB/CPCC)"
+  },
+  {
+   "id": 10831,
+   "name": "Rohini, Delhi - DPCC-10831",
+   "why": "Delhi"
+  },
+  {
+   "id": 10905,
+   "name": "Rishi Nagar, Kaithal - HSPCB-10905",
+   "why": "coverage 727 days in 2018-22, 0 in 2025-26"
+  },
+  {
+   "id": 10906,
+   "name": "Murthal, Sonipat - HSPCB-10906",
+   "why": "coverage 633 days in 2018-22, 0 in 2025-26"
+  },
+  {
+   "id": 10921,
+   "name": "NISE Gwal Pahari, Gurugram - IMD-10921",
+   "why": "not a government network station (HSPCB/UPPCB/PPCB/RSPCB/CPCC)"
+  },
+  {
+   "id": 11603,
+   "name": "Chandni Chowk, Delhi - IITM-11603",
+   "why": "Delhi"
+  },
+  {
+   "id": 11607,
+   "name": "Lodhi Road, Delhi - IITM-11607",
+   "why": "Delhi"
+  }
+ ]
+}
