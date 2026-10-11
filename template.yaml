@@ -18,7 +18,9 @@ Parameters:
     Default: ""
     Description: >-
       Forward test only. Comma list of v1_25_baseline,v2_35_candidate,v3_hybrid to log as shadow forecasts
-      (pk="shadow"). Empty (default) = shadow logging off. Build the package with SHADOW=1 bash scripts/build_lambda.sh.
+      (pk="shadow") plus one provenance record per night (pk="provenance"). Empty (default) = shadow logging off.
+      Build the package with SHADOW=1 bash scripts/build_lambda.sh. V1 keeps serving: do NOT set MODEL_VERSION.
+      See FORWARD_TEST_OPERATIONS.md.
 
 Globals:
   Function:
@@ -52,7 +54,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: build/lambda/
-      Handler: forecast_handler.handler
+      Handler: forward_logger.handler   # runs the frozen forecast_handler.handler unchanged and adds provenance records (rollback: forecast_handler.handler)
       Environment:
         Variables:
           TABLE_NAME: !Ref ForecastTable

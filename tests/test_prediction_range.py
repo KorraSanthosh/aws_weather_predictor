@@ -205,7 +205,8 @@ def test_nightly_forecast_and_shadow_log_do_not_carry_the_range():
 
 def test_calibration_ships_inside_core_which_the_lambda_build_copies_whole():
     assert Path(pr.CALIBRATION_FILE).parent.name == "core" and Path(pr.CALIBRATION_FILE).exists()
-    assert "cp -r core build/lambda/core" in (ROOT / "scripts" / "build_lambda.sh").read_text()
+    # the build script copies the whole core/ folder (the output folder is $OUT, default build/lambda, since BUILD_DIR was added)
+    assert 'cp -r core "$OUT/core"' in (ROOT / "scripts" / "build_lambda.sh").read_text()
 
 
 # ------------------------------------------------------------------ static dashboard data
