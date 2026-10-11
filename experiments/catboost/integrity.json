@@ -1,0 +1,9 @@
+{
+ "files_checked": 144,
+ "changed": [],
+ "removed": [],
+ "added_outside_catboost_folder": [],
+ "unchanged": true,
+ "summary": "all 144 protected files (models, checksums, data, code, docs, tests) are byte-identical; nothing added or removed outside experiments/catboost/",
+ "tests": "all 123 of the project's tests pass; 9 experiment tests pass"
+}

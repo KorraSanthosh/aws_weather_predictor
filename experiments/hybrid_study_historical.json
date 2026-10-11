@@ -1,0 +1,461 @@
+{
+ "what": "Descriptive history of the predeclared hybrid (\"v3_hybrid\": v2 when all 7 day-part inputs exist, else v1).",
+ "rule": "v2_35_candidate if all 7 day-part inputs finite else v1_25_baseline",
+ "status": "DESCRIPTIVE on an already-examined period; not evidence for promotion",
+ "test_days": 1261,
+ "no_variants_tried": true,
+ "offline": {
+  "full_period": {
+   "n_days": 1261,
+   "v1": {
+    "mae": 20.62,
+    "rmse": 33.1,
+    "r2": 0.85,
+    "cat_acc": 0.639
+   },
+   "v2": {
+    "mae": 20.48,
+    "rmse": 33.14,
+    "r2": 0.85,
+    "cat_acc": 0.649
+   },
+   "hybrid": {
+    "mae": 19.74,
+    "rmse": 32.15,
+    "r2": 0.859,
+    "cat_acc": 0.665
+   },
+   "hybrid_vs_v1_mae": {
+    "pct": -4.27,
+    "ci95": [
+     -6.44,
+     -2.29
+    ],
+    "ci_excludes_zero": true
+   },
+   "hybrid_vs_v2_mae": {
+    "pct": -3.6,
+    "ci95": [
+     -5.73,
+     -1.37
+    ],
+    "ci_excludes_zero": true
+   },
+   "v2_vs_v1_mae": {
+    "pct": -0.7,
+    "ci95": [
+     -3.94,
+     2.4
+    ],
+    "ci_excludes_zero": false
+   }
+  },
+  "days_with_valid_dayparts": {
+   "n_days": 525,
+   "v1": {
+    "mae": 15.56,
+    "rmse": 24.42,
+    "r2": 0.87,
+    "cat_acc": 0.648
+   },
+   "v2": {
+    "mae": 13.44,
+    "rmse": 21.13,
+    "r2": 0.903,
+    "cat_acc": 0.709
+   },
+   "hybrid": {
+    "mae": 13.44,
+    "rmse": 21.13,
+    "r2": 0.903,
+    "cat_acc": 0.709
+   },
+   "hybrid_vs_v1_mae": {
+    "pct": -13.6,
+    "ci95": [
+     -19.09,
+     -8.09
+    ],
+    "ci_excludes_zero": true
+   },
+   "hybrid_vs_v2_mae": {
+    "pct": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "ci_excludes_zero": false
+   },
+   "v2_vs_v1_mae": {
+    "pct": -13.6,
+    "ci95": [
+     -19.09,
+     -8.09
+    ],
+    "ci_excludes_zero": true
+   }
+  },
+  "days_without_dayparts_hybrid_falls_back_to_v1": {
+   "n_days": 736,
+   "v1": {
+    "mae": 24.24,
+    "rmse": 38.1,
+    "r2": 0.833,
+    "cat_acc": 0.633
+   },
+   "v2": {
+    "mae": 25.5,
+    "rmse": 39.53,
+    "r2": 0.82,
+    "cat_acc": 0.606
+   },
+   "hybrid": {
+    "mae": 24.24,
+    "rmse": 38.1,
+    "r2": 0.833,
+    "cat_acc": 0.633
+   },
+   "hybrid_vs_v1_mae": {
+    "pct": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "ci_excludes_zero": false
+   },
+   "hybrid_vs_v2_mae": {
+    "pct": -4.95,
+    "ci95": [
+     -7.7,
+     -2.02
+    ],
+    "ci_excludes_zero": true
+   },
+   "v2_vs_v1_mae": {
+    "pct": 5.21,
+    "ci95": [
+     2.06,
+     8.34
+    ],
+    "ci_excludes_zero": true
+   }
+  },
+  "winter_15Oct-15Feb": {
+   "n_days": 351,
+   "v1": {
+    "mae": 40.51,
+    "rmse": 55.02,
+    "r2": 0.617,
+    "cat_acc": 0.661
+   },
+   "v2": {
+    "mae": 41.6,
+    "rmse": 55.5,
+    "r2": 0.61,
+    "cat_acc": 0.655
+   },
+   "hybrid": {
+    "mae": 39.72,
+    "rmse": 53.94,
+    "r2": 0.632,
+    "cat_acc": 0.684
+   },
+   "hybrid_vs_v1_mae": {
+    "pct": -1.96,
+    "ci95": [
+     -4.73,
+     0.77
+    ],
+    "ci_excludes_zero": false
+   },
+   "hybrid_vs_v2_mae": {
+    "pct": -4.52,
+    "ci95": [
+     -7.52,
+     -1.55
+    ],
+    "ci_excludes_zero": true
+   },
+   "v2_vs_v1_mae": {
+    "pct": 2.68,
+    "ci95": [
+     -1.54,
+     7.17
+    ],
+    "ci_excludes_zero": false
+   }
+  },
+  "winter_with_dayparts": {
+   "n_days": 104,
+   "v1": {
+    "mae": 32.71,
+    "rmse": 43.37,
+    "r2": 0.621,
+    "cat_acc": 0.644
+   },
+   "v2": {
+    "mae": 30.03,
+    "rmse": 38.5,
+    "r2": 0.701,
+    "cat_acc": 0.721
+   },
+   "hybrid": {
+    "mae": 30.03,
+    "rmse": 38.5,
+    "r2": 0.701,
+    "cat_acc": 0.721
+   },
+   "hybrid_vs_v1_mae": {
+    "pct": -8.2,
+    "ci95": [
+     -19.09,
+     3.64
+    ],
+    "ci_excludes_zero": false
+   },
+   "hybrid_vs_v2_mae": {
+    "pct": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "ci_excludes_zero": false
+   },
+   "v2_vs_v1_mae": {
+    "pct": -8.2,
+    "ci95": [
+     -19.09,
+     3.64
+    ],
+    "ci_excludes_zero": false
+   }
+  }
+ },
+ "live": {
+  "full_period": {
+   "n_days": 1261,
+   "v1": {
+    "mae": 20.77,
+    "rmse": 33.32,
+    "r2": 0.848,
+    "cat_acc": 0.639
+   },
+   "v2": {
+    "mae": 20.61,
+    "rmse": 33.39,
+    "r2": 0.848,
+    "cat_acc": 0.64
+   },
+   "hybrid": {
+    "mae": 19.88,
+    "rmse": 32.41,
+    "r2": 0.856,
+    "cat_acc": 0.657
+   },
+   "hybrid_vs_v1_mae": {
+    "pct": -4.31,
+    "ci95": [
+     -6.53,
+     -2.25
+    ],
+    "ci_excludes_zero": true
+   },
+   "hybrid_vs_v2_mae": {
+    "pct": -3.56,
+    "ci95": [
+     -5.7,
+     -1.33
+    ],
+    "ci_excludes_zero": true
+   },
+   "v2_vs_v1_mae": {
+    "pct": -0.78,
+    "ci95": [
+     -3.98,
+     2.42
+    ],
+    "ci_excludes_zero": false
+   }
+  },
+  "days_with_valid_dayparts": {
+   "n_days": 519,
+   "v1": {
+    "mae": 15.94,
+    "rmse": 25.21,
+    "r2": 0.861,
+    "cat_acc": 0.647
+   },
+   "v2": {
+    "mae": 13.77,
+    "rmse": 22.15,
+    "r2": 0.893,
+    "cat_acc": 0.69
+   },
+   "hybrid": {
+    "mae": 13.77,
+    "rmse": 22.15,
+    "r2": 0.893,
+    "cat_acc": 0.69
+   },
+   "hybrid_vs_v1_mae": {
+    "pct": -13.64,
+    "ci95": [
+     -19.45,
+     -7.54
+    ],
+    "ci_excludes_zero": true
+   },
+   "hybrid_vs_v2_mae": {
+    "pct": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "ci_excludes_zero": false
+   },
+   "v2_vs_v1_mae": {
+    "pct": -13.64,
+    "ci95": [
+     -19.45,
+     -7.54
+    ],
+    "ci_excludes_zero": true
+   }
+  },
+  "days_without_dayparts_hybrid_falls_back_to_v1": {
+   "n_days": 742,
+   "v1": {
+    "mae": 24.15,
+    "rmse": 37.97,
+    "r2": 0.834,
+    "cat_acc": 0.633
+   },
+   "v2": {
+    "mae": 25.4,
+    "rmse": 39.39,
+    "r2": 0.821,
+    "cat_acc": 0.605
+   },
+   "hybrid": {
+    "mae": 24.15,
+    "rmse": 37.97,
+    "r2": 0.834,
+    "cat_acc": 0.633
+   },
+   "hybrid_vs_v1_mae": {
+    "pct": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "ci_excludes_zero": false
+   },
+   "hybrid_vs_v2_mae": {
+    "pct": -4.91,
+    "ci95": [
+     -7.72,
+     -2.08
+    ],
+    "ci_excludes_zero": true
+   },
+   "v2_vs_v1_mae": {
+    "pct": 5.16,
+    "ci95": [
+     2.12,
+     8.37
+    ],
+    "ci_excludes_zero": true
+   }
+  },
+  "winter_15Oct-15Feb": {
+   "n_days": 351,
+   "v1": {
+    "mae": 40.84,
+    "rmse": 55.32,
+    "r2": 0.613,
+    "cat_acc": 0.658
+   },
+   "v2": {
+    "mae": 41.65,
+    "rmse": 55.81,
+    "r2": 0.606,
+    "cat_acc": 0.655
+   },
+   "hybrid": {
+    "mae": 39.79,
+    "rmse": 54.26,
+    "r2": 0.627,
+    "cat_acc": 0.684
+   },
+   "hybrid_vs_v1_mae": {
+    "pct": -2.56,
+    "ci95": [
+     -6.0,
+     0.62
+    ],
+    "ci_excludes_zero": false
+   },
+   "hybrid_vs_v2_mae": {
+    "pct": -4.45,
+    "ci95": [
+     -7.47,
+     -1.48
+    ],
+    "ci_excludes_zero": true
+   },
+   "v2_vs_v1_mae": {
+    "pct": 1.98,
+    "ci95": [
+     -2.6,
+     6.78
+    ],
+    "ci_excludes_zero": false
+   }
+  },
+  "winter_with_dayparts": {
+   "n_days": 103,
+   "v1": {
+    "mae": 33.95,
+    "rmse": 44.82,
+    "r2": 0.597,
+    "cat_acc": 0.641
+   },
+   "v2": {
+    "mae": 30.39,
+    "rmse": 40.15,
+    "r2": 0.676,
+    "cat_acc": 0.728
+   },
+   "hybrid": {
+    "mae": 30.39,
+    "rmse": 40.15,
+    "r2": 0.676,
+    "cat_acc": 0.728
+   },
+   "hybrid_vs_v1_mae": {
+    "pct": -10.49,
+    "ci95": [
+     -22.14,
+     3.07
+    ],
+    "ci_excludes_zero": false
+   },
+   "hybrid_vs_v2_mae": {
+    "pct": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "ci_excludes_zero": false
+   },
+   "v2_vs_v1_mae": {
+    "pct": -10.49,
+    "ci95": [
+     -22.14,
+     3.07
+    ],
+    "ci_excludes_zero": false
+   }
+  }
+ }
+}

@@ -23,8 +23,15 @@
     var cat = $("category");
     cat.textContent = forecast.category;
     cat.className = "pill " + forecast.category.split(" ")[0];
-    $("pm-range").textContent = "PM2.5 about " + Math.round(forecast.pm25) + " µg/m³ (likely " +
-      Math.round(forecast.pm25_low) + "–" + Math.round(forecast.pm25_high) + ")";
+    var pr = forecast.prediction_range;
+    if (pr) {
+      // the calibrated range is shown below; the older "likely lo-hi" figures are not repeated (two ranges would confuse)
+      $("pm-range").textContent = "PM2.5 about " + Math.round(forecast.pm25) + " µg/m³";
+      drawRange(pr);
+    } else {
+      $("pm-range").textContent = "PM2.5 about " + Math.round(forecast.pm25) + " µg/m³ (likely " +
+        Math.round(forecast.pm25_low) + "–" + Math.round(forecast.pm25_high) + ")";
+    }
     if (forecast.today_pm25 != null) {
       $("today-line").textContent = "Latest full day measured: " + Math.round(forecast.today_pm25) + " µg/m³ PM2.5.";
     }
@@ -39,6 +46,23 @@
     }
     drawChart(history || []);
     if (metrics) drawMetrics(metrics);
+  }
+
+  // Calibrated 90 % range around the forecast: uncertainty only; the category and school decision do not come from it.
+  function drawRange(pr) {
+    var host = $("range-line");
+    host.textContent = "";
+    function add(text, cls) {
+      var s = document.createElement("span");
+      s.textContent = text; if (cls) s.className = cls;
+      host.appendChild(s); return s;
+    }
+    function pill(cat) { add(cat, "pill sm " + cat.split(" ")[0]); }
+    add("Likely range:", "range-label");
+    pill(pr.category_low);
+    if (pr.category_high !== pr.category_low) { add("to", "range-to"); pill(pr.category_high); }
+    add("(PM2.5 " + pr.pm25_low + "–" + pr.pm25_high + " µg/m³)", "muted range-pm");
+    $("range").hidden = false;
   }
 
   function drawChart(rows) {
@@ -115,12 +139,95 @@
     $("metrics-card").hidden = false;
   }
 
+
+  // ---------- Delhi map: station AQI markers + coloured zones ----------
+  var AQI_COLORS = { "Good": "#009865", "Satisfactory": "#7FBF3F", "Moderate": "#E8C100",
+                     "Poor": "#F28C28", "Very Poor": "#D7263D", "Severe": "#7E0023" };
+  var DARK_TEXT = { "Satisfactory": 1, "Moderate": 1, "Poor": 1 };
+
+  function drawScale() {
+    var host = $("scale"); host.textContent = "";
+    Object.keys(AQI_COLORS).forEach(function (k) {
+      var s = document.createElement("span"), i = document.createElement("i");
+      i.style.background = AQI_COLORS[k]; s.appendChild(i); s.appendChild(document.createTextNode(k)); host.appendChild(s);
+    });
+  }
+
+  function initMap(data) {
+    if (!window.L || !data || !data.stations || !data.stations.length) {
+      $("map-card").hidden = true; return;
+    }
+    drawScale();
+    var map = L.map("map", { scrollWheelZoom: false }).setView([28.64, 77.2], 11);
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+      { maxZoom: 17, attribution: "© OpenStreetMap contributors" }).addTo(map);
+    var layer = L.layerGroup().addTo(map);
+    var mode = "today";
+
+    function valueOf(st) { return mode === "today" ? (st.pm25 != null ? st : null) : (st.tomorrow_est || null); }
+
+    function popup(st) {
+      var v = valueOf(st), box = document.createElement("div"); box.className = "pop";
+      var h = document.createElement("h3"); h.textContent = st.short; box.appendChild(h);
+      var p = document.createElement("p");
+      p.textContent = v ? "AQI " + v.aqi + " · " + v.category + " · PM2.5 " + Math.round(v.pm25) + " µg/m³"
+                        : "No complete reading for this day.";
+      box.appendChild(p);
+      var q = document.createElement("p"); q.className = "muted";
+      q.textContent = (mode === "today" ? "Measured on " : "Estimate for the day after ") + data.date;
+      box.appendChild(q);
+      return box;
+    }
+
+    function paint() {
+      layer.clearLayers();
+      data.stations.forEach(function (st) {
+        var v = valueOf(st);
+        var pos = [st.lat, st.lon];
+        if (v) {
+          L.circle(pos, { radius: 3800, stroke: false, fillColor: AQI_COLORS[v.category], fillOpacity: 0.32 }).addTo(layer);
+          L.circle(pos, { radius: 1800, stroke: false, fillColor: AQI_COLORS[v.category], fillOpacity: 0.28 }).addTo(layer);
+        }
+        var wrap = document.createElement("div");
+        var pin = document.createElement("div");
+        pin.className = "aqi-pin" + (v ? (DARK_TEXT[v.category] ? " dark" : "") : " na");
+        if (v) pin.style.background = AQI_COLORS[v.category];
+        pin.textContent = v ? v.aqi : "n/a";
+        var lab = document.createElement("span"); lab.className = "pin-name"; lab.textContent = st.short;
+        wrap.appendChild(pin); wrap.appendChild(lab);
+        var icon = L.divIcon({ className: "", html: wrap, iconSize: [40, 40], iconAnchor: [20, 20] });
+        var m = L.marker(pos, { icon: icon, title: st.short + (v ? ": AQI " + v.aqi : ": no data") }).addTo(layer);
+        m.bindPopup(popup(st));
+      });
+    }
+
+    function setMode(m) {
+      mode = m;
+      $("view-today").className = m === "today" ? "on" : ""; $("view-today").setAttribute("aria-pressed", m === "today");
+      $("view-tomorrow").className = m === "tomorrow" ? "on" : ""; $("view-tomorrow").setAttribute("aria-pressed", m === "tomorrow");
+      paint();
+    }
+    $("view-today").onclick = function () { setMode("today"); };
+    $("view-tomorrow").onclick = function () { setMode("tomorrow"); };
+    if (!data.stations.some(function (s) { return s.tomorrow_est; })) $("view-tomorrow").hidden = true;
+    $("map-note").textContent = "Coloured areas show the AQI around each monitoring station. Latest complete day: " + fmtDate(data.date) + ".";
+    paint();
+    map.fitBounds(L.latLngBounds(data.stations.map(function (s) { return [s.lat, s.lon]; })).pad(0.25));
+  }
+  getJSON("data/stations.json").then(initMap).catch(function () { $("map-card").hidden = true; });
+
   var metricsP = getJSON("data/metrics.json").catch(function () { return null; });
   var main;
   if (API) {
     main = getJSON(API + "/forecast").then(function (d) { return [d.forecast, d.history]; });
   } else {
-    main = Promise.all([getJSON("data/forecast.json"), getJSON("data/history.json")]);
+    var rangeP = getJSON("data/range.json").catch(function () { return null; });   // optional (scripts/make_range_json.py)
+    main = Promise.all([getJSON("data/forecast.json"), getJSON("data/history.json"), rangeP]).then(function (r) {
+      var fc = r[0], rg = r[2];
+      // attach only when it was made for exactly this forecast, so a stale file is never shown against a newer one
+      if (rg && rg.prediction_range && rg.target_date === fc.target_date && rg.pm25 === fc.pm25) fc.prediction_range = rg.prediction_range;
+      return [fc, r[1]];
+    });
   }
   Promise.all([main, metricsP]).then(function (res) {
     var fc = res[0][0], hist = res[0][1], metrics = res[1];

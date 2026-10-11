@@ -1,0 +1,30 @@
+{
+ "branch": "feature/regional-cities",
+ "based_on": "feature/prediction-range @ ee781d4",
+ "tracked_files_at_start": 186,
+ "tracked_files_modified": [
+  "README.md"
+ ],
+ "tracked_files_modified_note": "README.md only: one added section describing this experiment; no code, model, Lambda, dashboard or frozen file changed",
+ "untracked_new_files": [
+  "experiments/regional_cities/archive_coverage.json",
+  "experiments/regional_cities/config.json",
+  "experiments/regional_cities/download_regional.py",
+  "experiments/regional_cities/integrity.json",
+  "experiments/regional_cities/metrics.json",
+  "experiments/regional_cities/regional_daily.csv",
+  "experiments/regional_cities/report.md",
+  "experiments/regional_cities/report.py",
+  "experiments/regional_cities/run_regional.py",
+  "experiments/regional_cities/select_stations.py",
+  "experiments/regional_cities/stations.json",
+  "experiments/regional_cities/tests/test_regional_cities.py"
+ ],
+ "freeze_check": "python model/freeze_manifest.py --check -> 'forward-test manifest: OK - everything matches'",
+ "tests": "full suite in the build workspace: 196 passed, 1 skipped (catboost not installed); this experiment adds 19 tests",
+ "raw_data": "data/raw/regional/ (2.05 million readings, 64 MB) is git-ignored; regional_daily.csv holds the derived group-day values; download_regional.py recreates the raw files",
+ "pushed": false,
+ "deployed": false,
+ "default_model_changed": false,
+ "frozen_files_checked_by_freeze_manifest": 12
+}

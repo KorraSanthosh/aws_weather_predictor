@@ -13,6 +13,14 @@ Parameters:
   AlertEmail:
     Type: String
     Description: Email that receives Poor-or-worse alerts (you must confirm the subscription email)
+  ShadowVersions:
+    Type: String
+    Default: ""
+    Description: >-
+      Forward test only. Comma list of v1_25_baseline,v2_35_candidate,v3_hybrid to log as shadow forecasts
+      (pk="shadow") plus one provenance record per night (pk="provenance"). Empty (default) = shadow logging off.
+      Build the package with SHADOW=1 bash scripts/build_lambda.sh. V1 keeps serving: do NOT set MODEL_VERSION.
+      See FORWARD_TEST_OPERATIONS.md.
 
 Globals:
   Function:
@@ -46,13 +54,14 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: build/lambda/
-      Handler: forecast_handler.handler
+      Handler: forward_logger.handler   # runs the frozen forecast_handler.handler unchanged and adds provenance records (rollback: forecast_handler.handler)
       Environment:
         Variables:
           TABLE_NAME: !Ref ForecastTable
           TOPIC_ARN: !Ref AlertTopic
           OPENAQ_API_KEY: !Ref OpenAQApiKey
           SENSOR_IDS: !Ref SensorIds
+          SHADOW_VERSIONS: !Ref ShadowVersions
       Policies:
         - DynamoDBCrudPolicy: { TableName: !Ref ForecastTable }
         - SNSPublishMessagePolicy: { TopicName: !GetAtt AlertTopic.TopicName }

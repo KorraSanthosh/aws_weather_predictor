@@ -1,0 +1,21 @@
+{
+ "finalists": {
+  "best_single": "xgb_rs27_v2",
+  "ensemble_top3": [
+   "xgb_rs27_v2",
+   "mlp_a3.0_v2",
+   "ridge_a100_v2"
+  ],
+  "best_mlp": "mlp_a3.0_v2",
+  "best_classifier": "xgb_classifier_v1"
+ },
+ "per_family_best": {
+  "xgb": "xgb_rs27_v2",
+  "hgb": "hgb_lr0.03_d3_l20_v2",
+  "et": "et_leaf3_mf1.0_v2",
+  "ridge": "ridge_a100_v2",
+  "mlp": "mlp_a3.0_v2"
+ },
+ "rule": "best per family by pooled blocked-CV MAE; ensemble = unweighted mean of the 3 best families",
+ "dev_rows": 1196
+}

@@ -1,10 +1,14 @@
 """Train the next-day PM2.5 model and evaluate it honestly.
 
-    python model/train.py
+    python model/train.py                          # trains the baseline (v1_25_baseline) -> model/v1_25_baseline/
+    python model/train.py --version v2_35_candidate
+    python model/train.py --version v1_25_baseline --promote    # also copy to the default model/ + web/data/
 
 Reads  data/daily.csv (+ data/daily.meta.json)
-Writes model/model.json, model/model_meta.json, model/metrics.json,
-       web/data/{metrics,history,forecast}.json  (static demo data for the website)
+Writes model/<version>/{model.json,model_meta.json,metrics.json,web_*.json}
+       It REFUSES to overwrite an existing version directory (use --force) so a stored model can never be
+       replaced by accident. Only --promote touches the default model/model.json and web/data/*.json
+       (which is what the Lambda package and the dashboard read). See model/MODEL_VERSIONS.md.
 
 EVALUATION (rolling winter folds)
   Air quality in Delhi is easy in the monsoon and hard in winter, so we test on winters:
@@ -19,9 +23,11 @@ EVALUATION (rolling winter folds)
 The uncertainty range shown in the app comes from the pooled winter test errors.
 The final deployed model is refit on ALL available days.
 """
+import argparse
 import csv
 import json
 import math
+import shutil
 import sys
 from datetime import date, timedelta
 from pathlib import Path
@@ -31,9 +37,11 @@ import xgboost as xgb
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from core.aqi import POOR_PM25_THRESHOLD, pm25_to_aqi, pm25_to_category, school_guidance  # noqa: E402
-from core.features import FEATURE_NAMES, build_features  # noqa: E402
+from core.daily import DP_KEYS  # noqa: E402
+from core.features import DEFAULT_MODEL_VERSION, FEATURE_SETS, build_features  # noqa: E402
 from core.weather import WEATHER_KEYS  # noqa: E402
 
+FEATURE_NAMES = FEATURE_SETS[DEFAULT_MODEL_VERSION]   # set from --version in main()
 MIN_TRAIN = 365        # a full-winter fold needs at least this many earlier days
 MIN_TEST = 60          # ... and at least this many testable days in the window
 MIN_TRAIN_LATE = 240   # late-winter holdout (used when only ONE winter exists): earlier days needed
@@ -59,13 +67,15 @@ def load_daily(path="data/daily.csv"):
             rec = {"pm25": float(r["pm25"]) if r["pm25"] != "" else None}
             for k in WEATHER_KEYS:
                 rec[k] = float(r[k]) if r.get(k, "") != "" else None
+            for k in DP_KEYS:                       # day-part PM2.5 (blank where only daily files exist)
+                rec[k] = float(r[k]) if r.get(k, "") not in ("", None) else None
             hist[d] = rec
             if r.get("cams_pm25", "") != "":
                 cams[d] = float(r["cams_pm25"])
     return hist, cams
 
 
-def make_rows(hist):
+def make_rows(hist, names=None):
     """One row per day D that has PM2.5 on D+1 and weather on D+1."""
     X, y, targets = [], [], []
     for d0 in sorted(hist):
@@ -73,8 +83,8 @@ def make_rows(hist):
         nxt = hist.get(d1)
         if not nxt or nxt["pm25"] is None or any(nxt[k] is None for k in WEATHER_KEYS):
             continue
-        feats = build_features(hist, d0, {k: nxt[k] for k in WEATHER_KEYS})
-        if math.isnan(feats[FEATURE_NAMES.index("pm_d0")]):
+        feats = build_features(hist, d0, {k: nxt[k] for k in WEATHER_KEYS}, names=names or FEATURE_NAMES)
+        if math.isnan(feats[(names or FEATURE_NAMES).index("pm_d0")]):
             continue                                   # need today's reading
         X.append(feats)
         y.append(nxt["pm25"])
@@ -184,10 +194,21 @@ def monthly_walk_forward(X, delta, base, y, targets, start=date(2025, 1, 1)):
 
 
 def main():
+    global FEATURE_NAMES
+    ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    ap.add_argument("--version", default=DEFAULT_MODEL_VERSION, choices=sorted(FEATURE_SETS))
+    ap.add_argument("--force", action="store_true", help="overwrite an existing model/<version>/ directory")
+    ap.add_argument("--promote", action="store_true",
+                    help="also copy this version to the default model/*.json and web/data/*.json")
+    args = ap.parse_args()
+    FEATURE_NAMES = FEATURE_SETS[args.version]
+    vdir = Path("model") / args.version
+    if (vdir / "model.json").exists() and not args.force:
+        sys.exit(f"{vdir}/model.json already exists - refusing to overwrite a stored model (use --force).")
     hist, cams = load_daily()
     meta_in = json.loads(Path("data/daily.meta.json").read_text()) if Path("data/daily.meta.json").exists() else {}
     source = meta_in.get("source", "unknown")
-    X, y, targets = make_rows(hist)
+    X, y, targets = make_rows(hist, FEATURE_NAMES)
     if len(y) < MIN_ROWS:
         sys.exit(f"Only {len(y)} usable days; need at least {MIN_ROWS}. Get more history or stations.")
     pm0_col = FEATURE_NAMES.index("pm_d0")
@@ -300,35 +321,46 @@ def main():
     importances = sorted(zip(FEATURE_NAMES, final.feature_importances_), key=lambda t: -t[1])
     results["top_features"] = [{"name": n_, "importance": round(float(v), 4)} for n_, v in importances[:8]]
 
-    Path("model").mkdir(exist_ok=True)
-    final.get_booster().save_model("model/model.json")
-    Path("model/model_meta.json").write_text(json.dumps({
+    vdir.mkdir(parents=True, exist_ok=True)
+    final.get_booster().save_model(str(vdir / "model.json"))
+    (vdir / "model_meta.json").write_text(json.dumps({
+        "model_version": args.version, "n_features": len(FEATURE_NAMES),
         "features": FEATURE_NAMES, "target_transform": "log1p_delta_vs_today",
+        "needs_hourly_dayparts": any(f in FEATURE_NAMES for f in ("pm_night", "pm_school", "pm_last3h_ratio")),
         "log_resid_q10": round(q10, 4), "log_resid_q90": round(q90, 4),
         "trained_through": targets[-1].isoformat(), "data_source": source,
         "n_estimators": n_est, "evaluation": mode}, indent=2))
-    Path("model/metrics.json").write_text(json.dumps(results, indent=2))
+    (vdir / "metrics.json").write_text(json.dumps(results, indent=2))
 
-    # ---------- static demo data for the website ----------
-    web = Path("web/data")
-    web.mkdir(parents=True, exist_ok=True)
-    (web / "history.json").write_text(json.dumps([
+    # ---------- static demo data for the website (stored per version; the default dashboard files are only
+    # replaced by --promote) ----------
+    (vdir / "web_history.json").write_text(json.dumps([
         {"date": t.isoformat(), "actual": round(float(a), 1), "predicted": round(float(p), 1),
          "baseline": round(float(b), 1)} for t, a, p, b in last_fold_rows]))
-    (web / "metrics.json").write_text(json.dumps(results))
+    (vdir / "web_metrics.json").write_text(json.dumps(results))
 
     d_last = max(d for d, r in hist.items() if r["pm25"] is not None)
     proxy_wx = {k: hist[d_last][k] for k in WEATHER_KEYS}      # offline demo: reuse today's weather
-    feats = np.array([build_features(hist, d_last, proxy_wx)], dtype=float)
+    feats = np.array([build_features(hist, d_last, proxy_wx, names=FEATURE_NAMES)], dtype=float)
     pm = float(np.expm1(np.log1p(feats[0, pm0_col]) + final.predict(feats)[0]))
     lo, hi = pm * math.exp(q10), pm * math.exp(q90)
     category = pm25_to_category(pm)
-    (web / "forecast.json").write_text(json.dumps({
+    (vdir / "web_forecast.json").write_text(json.dumps({
         "target_date": (d_last + timedelta(days=1)).isoformat(), "generated_for": d_last.isoformat(),
         "pm25": round(pm, 1), "pm25_low": round(lo, 1), "pm25_high": round(hi, 1),
         "aqi": pm25_to_aqi(pm), "category": category, "guidance": school_guidance(category),
         "today_pm25": round(hist[d_last]["pm25"], 1), "data_source": source,
-        "weather_source": "offline demo (today's weather reused)"}))
+        "weather_source": "offline demo (today's weather reused)", "model_version": args.version}))
+    print(f"\nWrote {vdir}/ (model.json, model_meta.json, metrics.json, web_*.json)")
+
+    if args.promote:
+        web = Path("web/data")
+        web.mkdir(parents=True, exist_ok=True)
+        for src, dst in (("model.json", "model/model.json"), ("model_meta.json", "model/model_meta.json"),
+                         ("metrics.json", "model/metrics.json"), ("web_history.json", "web/data/history.json"),
+                         ("web_metrics.json", "web/data/metrics.json"), ("web_forecast.json", "web/data/forecast.json")):
+            shutil.copyfile(vdir / src, dst)
+        print(f"PROMOTED {args.version} to the default model/ and web/data/ files")
 
     print("\n=== POOLED RESULT ===")
     for k in ("model", "baseline_persistence", "baseline_7day_mean", "cams_global_model"):

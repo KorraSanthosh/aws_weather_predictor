@@ -1,0 +1,19 @@
+{
+ "protected_files_checked": 144,
+ "changed": [],
+ "removed": [],
+ "added_outside_earlier_experiments": [
+  "experiments/backtest_2025/audit.json",
+  "experiments/backtest_2025/audit.py",
+  "experiments/backtest_2025/metrics.json",
+  "experiments/backtest_2025/models/hybrid_router.json",
+  "experiments/backtest_2025/models/sha256.json",
+  "experiments/backtest_2025/models/v1_seed42.json",
+  "experiments/backtest_2025/models/v2_seed42.json",
+  "experiments/backtest_2025/report.md",
+  "experiments/backtest_2025/report.py",
+  "experiments/backtest_2025/run_backtest.py",
+  "experiments/backtest_2025/tests/test_backtest_2025.py"
+ ],
+ "note": "Existing production code, models, checksums, Lambda and dashboard files are byte-identical to the snapshot taken before these experiments."
+}

@@ -1,0 +1,20 @@
+{
+  "title": "Prediction range (interval) around the Hybrid forecast, with category and school-decision ranges",
+  "declared_before_running": true,
+  "branch": "feature/prediction-range",
+  "user_gate": "range accuracy >= 85 %",
+  "gate_interpretation": "Exact-category accuracy of a single value was 66-72 % in earlier tests, so an 85 % gate cannot refer to it. It is interpreted as RANGE ACCURACY: the share of test days on which the actual AQI category lies inside the predicted category range. A range is only useful if it is narrower than the naive 'point category +/- 1' (3 categories, 98.5 % coverage in 2025), so the gate also requires a mean range of fewer than 3 categories.",
+  "gate": {"range_accuracy_min": 0.85, "mean_categories_in_range_max": 3.0, "both_test_sets_required": true, "ci_lower_bound_not_required": true},
+  "point_forecast": "Hybrid (V2 if all 7 day-parts, else V1), production recipe, seed 42, unchanged",
+  "nominal_level": 0.90, "sensitivity_levels": [0.80, 0.95],
+  "methods": {
+    "M1_conformal_global": "split-conformal on log1p residuals (log1p(actual) - log1p(prediction)), one pair of quantiles for all days",
+    "M2_conformal_by_level": "same, quantiles per predicted-level bucket (<60, 60-120, >120 ug/m3; buckets with < 40 calibration days use M1)",
+    "M3_cqr": "XGBoost quantile regression (5 % / 95 % of the log-change target, same features and parameters as V1/V2, routed like the Hybrid) with conformal correction (CQR)"
+  },
+  "calibration": "strictly out-of-sample residuals dated BEFORE the test period: models trained on targets up to the end of the previous year predict the following months with archived 24 h forecast weather (days with no archived forecast are not used); no ERA5 substitution",
+  "method_choice_rule": "chosen on a split of the calibration period only (first half fits, second half scores: smallest |coverage - nominal| then smallest Winkler score); never on test results",
+  "test_sets": {"calendar_2025": "train <= 2024-12-31, calibration = 2024 (forecast archive from 2024-01-19)", "winter_2025_26": "train <= 2025-10-14, calibration = 2024-01-19 .. 2025-10-14 residuals"},
+  "not_included": "crop-fire (stubble burning) data: no such data exists in the project and the user asked to proceed with existing data only; it is deferred until the user supplies it",
+  "protect": "production code is imported read-only; no model, default, dashboard or Lambda is changed"
+}

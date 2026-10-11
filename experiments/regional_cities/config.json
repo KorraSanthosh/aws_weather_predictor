@@ -1,0 +1,97 @@
+{
+  "title": "Do PM2.5 readings from NCR / upwind cities improve the next-day Delhi forecast?",
+  "status": "RETROSPECTIVE. 2025 and winter 2025-26 were examined in earlier experiments, so this is not an untouched hold-out. Written BEFORE any regional model was run; run_regional.py stores the sha256 of this file in metrics.json.",
+  "question": "Add PM2.5 from government stations OUTSIDE Delhi (NCR towns, Haryana, Punjab, east UP) as extra inputs. Does the forecast of tomorrow's Delhi city-mean PM2.5 / CPCB category get better, measured on days the model has not seen?",
+  "target": "unchanged: Delhi city mean of Delhi stations only (>= 3 stations, >= 16 valid hours each). Regional stations are never part of the target or of the Delhi inputs.",
+  "data": {
+    "source": "OpenAQ public archive (s3://openaq-data-archive, unsigned, no key)",
+    "stations_file": "stations.json (44 government stations chosen by rule BEFORE any model: distance / bearing from central Delhi, board suffix, coverage in both 2018-22 and 2025-26)",
+    "groups": {
+      "ncr_near": "<= 55 km from central Delhi (Noida, Gurugram, Faridabad, Ghaziabad ...)",
+      "haryana_nw": "Haryana, north-west / west of Delhi (Rohtak, Panipat, Karnal, Jind, Bhiwani ...)",
+      "punjab": "Punjab (PPCB) - the stubble-burning belt",
+      "up_east": "east Uttar Pradesh (UPPCB) - east of Delhi"
+    },
+    "known_gap": "The archive holds NO Indian government-station data for 2023 and 2024 (legacy and provider layouts both checked) and only partial 2022. Regional inputs are therefore missing (NaN, never filled) in those years. Training with regional inputs effectively uses 2018 to mid-2022 and Feb 2025 onward.",
+    "hard_stop": "2026-02-15 (nothing later is downloaded or read; winter 2026-27 stays untouched)"
+  },
+  "regional_day_value": {
+    "station_day": "same rule as Delhi: mean of valid hourly values, >= 16 valid hours, 0 <= value <= 1000, India Standard Time days",
+    "group_day": "mean of the station-day values of one group, only if >= 2 stations of the group have a station-day; otherwise NaN (not filled)",
+    "live_view": "for an input that is today's (origin-day) value the test uses hours <= 22 only (what a 23:00 IST Lambda could see); training uses the full day, exactly like Delhi's own inputs"
+  },
+  "features": {
+    "per_group_three_numbers": {
+      "level": "log1p(group value on the reference day)",
+      "relative": "log1p(group value) - log1p(Delhi city value on the same day)",
+      "change": "log1p(group value on the reference day) - log1p(group value one day earlier)"
+    },
+    "arms": {
+      "ctrl": "no regional input (the unchanged V1 / V2 feature lists)",
+      "Rlag": "PRIMARY. Reference day = origin day - 1 (a complete day: needs NO extra live-latency assumption). +12 features (4 groups x 3), names r1_<group>_<level|rel|chg>",
+      "Rd0": "SECONDARY. Reference day = origin day (hours <= 22 at test time). Needs regional stations to report by 23:00 IST - an assumption that is NOT verified for the live Lambda. +12 features, names r0_<group>_<level|rel|chg>",
+      "plc": "PLACEBO. The Rlag feature vectors are permuted among days of the same calendar month (seed 0). Same number of extra columns, no real information. Measures the effect of merely adding 12 columns."
+    },
+    "models": "v1 = the 25-feature baseline (production default), v2 = the 35-feature candidate, hybrid = V2 if all 7 day-part inputs exist else V1 (core/hybrid.py). Each regional arm adds the same 12 columns to BOTH v1 and v2; the hybrid router is unchanged."
+  },
+  "recipe": "unchanged production recipe: XGBoost on the log1p change from today (fte.OLD_PARAMS, 800 trees, lr 0.03, depth 4), early stopping 40 on the last 60 training rows, no tuning, no refit inside a test window.",
+  "seeds": {
+    "primary": 42,
+    "all": [
+      42,
+      7,
+      123,
+      2024,
+      99
+    ]
+  },
+  "tests": {
+    "T1_calendar_2025": {
+      "train_targets_through": "2024-12-31",
+      "test": [
+        "2025-01-01",
+        "2025-12-31"
+      ]
+    },
+    "T2_winter_2025_26": {
+      "train_targets_through": "2025-10-14",
+      "test": [
+        "2025-10-15",
+        "2026-02-15"
+      ]
+    },
+    "weather": "archived 24 h-ahead forecast (Open-Meteo Previous Runs, production_default) for tomorrow; ERA5 for training and for today's weather - the same set-up as the 2025 backtest",
+    "same_days": "every arm is scored on identical days (those with an archived forecast and a scoreable Delhi origin/target)",
+    "overlap_note": "T1 and T2 overlap (15 Oct - 31 Dec 2025) with different training cut-offs; they are reported separately and never pooled."
+  },
+  "metrics": [
+    "MAE",
+    "RMSE",
+    "R2",
+    "exact CPCB category",
+    "within one category"
+  ],
+  "uncertainty": "moving-block bootstrap, 7- and 14-day blocks, 5000 resamples, seed 0, paired on the same days (experiments/weather_source_comparison/stats.py)",
+  "sudden_change_threshold": 0.3,
+  "decision_rule": {
+    "text": "Regional data counts as HELPFUL only if ALL hold for the primary comparison v1+Rlag versus v1 (same seed 42, same days): (1) MAE at least 2 % lower on BOTH T1 and T2; (2) the paired 95 % interval of the MAE difference is below zero for BOTH the 7-day and the 14-day blocks on BOTH tests; (3) exact-category accuracy is not lower on either test; (4) the placebo arm's MAE gain is less than half of the real arm's on both tests; (5) the seed-averaged difference has the same sign. Otherwise the answer is: no evidence of improvement. Rd0 and the hybrid / v2 variants are reported but never decide anything. A pass would still only be a hypothesis for the winter 2026-27 shadow test and never a reason to change the default model.",
+    "min_mae_gain_pct": 2.0
+  },
+  "integrity": {
+    "leakage_audit": "for every test day the regional features are rebuilt from a spying store; no date later than the origin day (Rlag: later than origin-1) may be read",
+    "canary": "a feature equal to the target day's Delhi value is added to v1; the pipeline must show a large gain (proves a leak would be seen)",
+    "control_identity": "the regional-free control built here must give predictions identical to fte.fit_models (same recipe)",
+    "no_target_contamination": "no regional station id may appear in any Delhi station folder"
+  },
+  "limitations": [
+    "2023 and 2024 regional data do not exist in the archive: the regional model learns from fewer rows, which can hide a real benefit.",
+    "Winters 2025-26 and calendar 2025 were examined before; this is not an untouched test.",
+    "Live use needs the regional stations to be fetched by the Lambda (OpenAQ API key, more calls, station outages). Not built and not tested here.",
+    "Station-level government data is noisy; no outlier cleaning beyond the production 0-1000 rule.",
+    "Crop-fire (satellite) data is not part of this experiment; the user will supply it later."
+  ],
+  "supplementary_added_after_first_one_seed_look": {
+    "when": "after a single-seed smoke run (seed 42) had been seen; the decision rule above was NOT changed",
+    "what": "restricted-training diagnostic: v1 and v1+Rlag both trained only on origins that have >= 2 regional groups (so the missing 2023-24 regional data cannot dilute the columns); plus the share of model gain taken by the placebo columns. Reported, never part of the decision."
+  }
+}

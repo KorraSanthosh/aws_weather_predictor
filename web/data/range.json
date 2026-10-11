@@ -1,0 +1,25 @@
+{
+ "target_date": "2026-10-08",
+ "pm25": 56.5,
+ "model_version": "v1_25_baseline",
+ "prediction_range": {
+  "level": 0.9,
+  "method": "M1_split_conformal_log1p",
+  "pm25_low": 30,
+  "pm25_high": 81,
+  "category_low": "Good",
+  "category_high": "Moderate",
+  "categories": [
+   "Good",
+   "Satisfactory",
+   "Moderate"
+  ],
+  "basis": "retrospective",
+  "calibration_id": "b3d7206aa97e",
+  "calibration_days": 721,
+  "calibration_period": [
+   "2024-01-20",
+   "2026-02-15"
+  ]
+ }
+}

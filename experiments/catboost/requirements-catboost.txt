@@ -1,0 +1,4 @@
+# Extra dependency for experiments/catboost ONLY. Install it in a separate environment, never into the project's own:
+#   python -m venv --system-site-packages .venv-catboost && .venv-catboost/bin/pip install -r experiments/catboost/requirements-catboost.txt
+# (.venv-catboost must not be committed.) The project's requirements.txt is not changed.
+catboost==1.2.10

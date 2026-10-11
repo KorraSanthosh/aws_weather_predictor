@@ -1,0 +1,51 @@
+{
+ "label": "RETROSPECTIVE: the shipped range maths reproduces the validated experiment (M1, 90 %)",
+ "calendar_2025": {
+  "n_calibration_days": 347,
+  "n_test_days": 344,
+  "calibration_last_day": "2024-12-31",
+  "test_first_day": "2025-01-01",
+  "offsets": {
+   "lo": -0.5131060906917412,
+   "hi": 0.3356057410191632
+  },
+  "experiment_M1_90": {
+   "pm25_coverage": 0.9331395348837209,
+   "range_accuracy": 0.9796511627906976,
+   "mean_categories_in_range": 2.453488372093023,
+   "mean_width_ugm3": 90.71706188036163,
+   "matches_stored_results_json": true
+  },
+  "shipped_function_whole_number_outward": {
+   "pm25_coverage": 0.9505813953488372,
+   "range_accuracy": 0.9796511627906976,
+   "mean_categories_in_range": 2.4825581395348837,
+   "mean_width_ugm3": 91.75
+  },
+  "point_forecast_unchanged": true
+ },
+ "winter_2025_26": {
+  "n_calibration_days": 617,
+  "n_test_days": 104,
+  "calibration_last_day": "2025-10-14",
+  "test_first_day": "2025-10-15",
+  "offsets": {
+   "lo": -0.514379469558506,
+   "hi": 0.3065401299530841
+  },
+  "experiment_M1_90": {
+   "pm25_coverage": 0.9038461538461539,
+   "range_accuracy": 0.9807692307692307,
+   "mean_categories_in_range": 2.4134615384615383,
+   "mean_width_ugm3": 144.69796770550977,
+   "matches_stored_results_json": true
+  },
+  "shipped_function_whole_number_outward": {
+   "pm25_coverage": 0.9038461538461539,
+   "range_accuracy": 0.9807692307692307,
+   "mean_categories_in_range": 2.4134615384615383,
+   "mean_width_ugm3": 145.71153846153845
+  },
+  "point_forecast_unchanged": true
+ }
+}

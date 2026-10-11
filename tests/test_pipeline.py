@@ -110,6 +110,7 @@ def _synthetic_in(tmp_path, monkeypatch, trim_from: str | None = None):
 def test_train_uses_rolling_winter_folds(tmp_path, monkeypatch):
     _synthetic_in(tmp_path, monkeypatch)
     import train
+    monkeypatch.setattr(sys, "argv", ["train.py", "--promote"])
     train.main()
     m = json.loads(Path("model/metrics.json").read_text())
     assert m["evaluation"] == "rolling_winter_folds"
@@ -127,6 +128,7 @@ def test_train_uses_rolling_winter_folds(tmp_path, monkeypatch):
 def test_train_tests_the_peak_of_a_single_winter(tmp_path, monkeypatch):
     _synthetic_in(tmp_path, monkeypatch, trim_from="2025-02-19")   # same span as the real data
     import train
+    monkeypatch.setattr(sys, "argv", ["train.py", "--promote"])
     train.main()
     m = json.loads(Path("model/metrics.json").read_text())
     assert m["evaluation"] == "late_winter_holdout"
@@ -138,6 +140,7 @@ def test_train_tests_the_peak_of_a_single_winter(tmp_path, monkeypatch):
 def test_train_falls_back_loudly_without_any_winter(tmp_path, monkeypatch, capsys):
     _synthetic_in(tmp_path, monkeypatch, trim_from="2025-09-01")   # too little before the winter
     import train
+    monkeypatch.setattr(sys, "argv", ["train.py", "--promote"])
     train.main()
     m = json.loads(Path("model/metrics.json").read_text())
     assert m["evaluation"] == "last_120_days_not_a_winter"
@@ -159,6 +162,7 @@ def test_bootstrap_interval_separates_real_gain_from_noise():
 def test_train_reports_robustness_fields(tmp_path, monkeypatch):
     _synthetic_in(tmp_path, monkeypatch)
     import train
+    monkeypatch.setattr(sys, "argv", ["train.py", "--promote"])
     train.main()
     m = json.loads(Path("model/metrics.json").read_text())
     assert {"low_pct", "high_pct", "clearly_better"} <= set(m["improvement_95pct_interval"])
@@ -202,3 +206,25 @@ def test_build_dataset_reads_cpcb_daily_files(tmp_path, monkeypatch):
     rows = {r["date"]: r for r in csv.DictReader(open("data/daily.csv"))}
     assert rows["2025-03-02"]["n_stations"] == "3" and float(rows["2025-03-02"]["pm25"]) == pytest.approx(200.0)
     assert "2025-03-10" not in rows                         # CPCB blank + only 2 stations -> day dropped
+
+
+def test_train_writes_a_versioned_dir_and_refuses_to_overwrite(tmp_path, monkeypatch):
+    """Safe versioning: training writes model/<version>/ and never silently replaces a stored model."""
+    _synthetic_in(tmp_path, monkeypatch, trim_from="2025-02-19")
+    import train
+    monkeypatch.setattr(sys, "argv", ["train.py", "--version", "v2_35_candidate"])
+    train.main()
+    vdir = Path("model/v2_35_candidate")
+    meta = json.loads((vdir / "model_meta.json").read_text())
+    assert meta["model_version"] == "v2_35_candidate" and meta["n_features"] == 35 == len(meta["features"])
+    assert meta["needs_hourly_dayparts"] is True
+    assert not Path("model/model.json").exists()                 # the default files are only touched by --promote
+    assert not Path("web/data/forecast.json").exists()
+    before = (vdir / "model.json").read_bytes()
+    with pytest.raises(SystemExit):
+        train.main()                                              # same version again -> refused
+    assert (vdir / "model.json").read_bytes() == before
+    monkeypatch.setattr(sys, "argv", ["train.py", "--version", "v1_25_baseline"])
+    train.main()
+    assert json.loads(Path("model/v1_25_baseline/model_meta.json").read_text())["n_features"] == 25
+    assert (vdir / "model.json").read_bytes() == before           # training v1 left v2 untouched

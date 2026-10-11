@@ -8,9 +8,9 @@ produce one feature row. Nothing after day D is ever read, except tomorrow's
 weather, which in live use comes from a weather FORECAST (in training it is the
 observed weather of that day - see README "weather forecast caveat").
 
-`ALL_FEATURES` is the full candidate set that was tested; `FEATURE_NAMES` is the
-subset the deployed model uses. Candidates were chosen on the 2019-2022 development period only
-(model/experiments.py); none beat v1 on the untouched 2023+ test, so v1 stays (EXPERIMENTS.md).
+`ALL_FEATURES` is every candidate that was computed; `FEATURE_SETS` holds the two model versions
+(see model/MODEL_VERSIONS.md); `FEATURE_NAMES` is the default (baseline) version's list. Day-part
+features (v2 only) are NaN on days without hourly data - they are never filled in.
 """
 from __future__ import annotations
 
@@ -18,6 +18,7 @@ import math
 from datetime import date, timedelta
 
 from .weather import WEATHER_KEYS
+from .daily import DP_KEYS
 
 NAN = float("nan")
 
@@ -27,6 +28,9 @@ BASE_WX = [f"wx0_{k}" for k in WEATHER_KEYS] + [f"wx1_{k}" for k in WEATHER_KEYS
 BASE_SEASON = ["doy_sin", "doy_cos"]
 BASE = BASE_PM + BASE_WX + BASE_SEASON                       # the original (v1) model
 
+DAYPART_FEATURES = ["pm_night", "pm_commute", "pm_school", "pm_evening", "pm_late", "pm_buildup", "pm_last3h_ratio"]
+FLAG_FEATURES = ["f_stubble", "f_diwali", "f_inversion", "f_weekend", "f_rain", "f_stagnant", "f_fog", "f_wind_nw"]
+
 GROUPS = {
     "lags": ["pm_d7", "pm_d13"],
     "rolling": ["pm_mean14", "pm_min7", "pm_max7", "pm_delta3", "pm_delta7", "pm_slope7",
@@ -35,11 +39,28 @@ GROUPS = {
                 "wx1_dir_u", "wx1_dir_v", "wx1_stagnant"],
     "seasonal": ["month", "dow", "weekend", "season", "winter", "diwali_days"],
     "spatial": ["n_stations", "pm_sd0", "pm_spread0", "pm_maxratio0"],
+    "dayparts": DAYPART_FEATURES,
+    "flags": FLAG_FEATURES,
 }
 ALL_FEATURES = BASE + [f for g in GROUPS.values() for f in g]
 
-# ---------- deployed feature set (v2) - selected on the development period ----------
-FEATURE_NAMES = BASE   # deployed = v1. The tested v2 candidate (BASE + lags, tuned) did NOT beat it on the final test; see EXPERIMENTS.md
+# ---------- model versions: each is a fixed, named feature list (never edited after it is trained) ----------
+# v1_25_baseline  : the original 25 features - the BASELINE and the default deployed model.
+# v2_35_candidate : v1-style PM2.5 history + weather + season, plus 7 day-part PM2.5 features and 8 binary domain
+#                   flags - the EXPERIMENTAL CANDIDATE (not default until a forward-looking test supports it).
+FEATURES_V1 = list(BASE)
+FEATURES_V2 = (
+    ["pm_d0", "pm_d1", "pm_d2", "pm_d3", "pm_mean3", "pm_mean7", "pm_std7", "pm_delta1"]          # 8 PM2.5 history
+    + [f"wx1_{k}" for k in ("temp", "rh", "wind", "precip", "pressure", "wind_u", "wind_v")]       # 7 tomorrow's weather
+    + ["wx0_wind", "wx0_rh", "wx0_precip"]                                                        # 3 today's weather
+    + BASE_SEASON                                                                                 # 2 day-of-year cycle
+    + DAYPART_FEATURES                                                                            # 7 day-part PM2.5
+    + FLAG_FEATURES                                                                               # 8 binary domain flags
+)
+assert len(FEATURES_V1) == 25 and len(FEATURES_V2) == 35
+FEATURE_SETS = {"v1_25_baseline": FEATURES_V1, "v2_35_candidate": FEATURES_V2}
+DEFAULT_MODEL_VERSION = "v1_25_baseline"
+FEATURE_NAMES = FEATURE_SETS[DEFAULT_MODEL_VERSION]      # what the default (deployed) model uses
 
 # Diwali (firecracker night) - a public calendar date, known years in advance.
 DIWALI = [date(2016, 10, 30), date(2017, 10, 19), date(2018, 11, 7), date(2019, 10, 27),
@@ -146,6 +167,25 @@ def feature_dict(history: dict[date, dict], d0: date, wx1: dict) -> dict[str, fl
     row["pm_sd0"] = sd / pm[0] if ok(sd, pm[0]) and pm[0] > 0 else NAN          # relative spread
     row["pm_spread0"] = (mx - mn) / pm[0] if ok(mx, mn, pm[0]) and pm[0] > 0 else NAN
     row["pm_maxratio0"] = mx / pm[0] if ok(mx, pm[0]) and pm[0] > 0 else NAN
+
+    # ---- day-part PM2.5 from today's hourly data (NaN when only daily files exist, e.g. CPCB years) ----
+    dp = {k: _num(today.get(k)) for k in DP_KEYS}
+    row["pm_night"], row["pm_commute"], row["pm_school"] = dp["dp_night"], dp["dp_commute"], dp["dp_school"]
+    row["pm_evening"], row["pm_late"] = dp["dp_evening"], dp["dp_late"]
+    row["pm_buildup"] = dp["dp_late"] / dp["dp_school"] if ok(dp["dp_late"], dp["dp_school"]) and dp["dp_school"] > 0 else NAN
+    row["pm_last3h_ratio"] = dp["dp_last3"] / dp["dp_day"] if ok(dp["dp_last3"], dp["dp_day"]) and dp["dp_day"] > 0 else NAN
+
+    # ---- binary domain flags about the TARGET day (calendar flags are known in advance) ----
+    md = (target.month, target.day)
+    row["f_weekend"] = float(target.weekday() >= 5)               # traffic and industry differ on weekends
+    row["f_stubble"] = float((10, 15) <= md <= (11, 30))          # crop-residue burning season upwind
+    row["f_diwali"] = float(-1 <= gap <= 4)                       # firecrackers and the smoke that lingers after
+    row["f_inversion"] = float(target.month in (12, 1))           # coldest months: shallow inversion layer
+    t1, rh1, w1, p1 = row["wx1_temp"], row["wx1_rh"], row["wx1_wind"], row["wx1_precip"]
+    row["f_rain"] = float(p1 >= 1.0) if ok(p1) else NAN           # rain washes particles out
+    row["f_stagnant"] = float(w1 < 5.0 and p1 < 0.5) if ok(w1, p1) else NAN
+    row["f_fog"] = float(rh1 > 85 and t1 < 12) if ok(rh1, t1) else NAN   # cold humid air: fog / smog traps pollution
+    row["f_wind_nw"] = float(u > 0.5 and v < -0.5) if ok(u, v) else NAN  # wind FROM the north-west, the smoke direction
     return row
 
 
