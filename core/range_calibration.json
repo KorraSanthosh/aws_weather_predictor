@@ -1,0 +1,74 @@
+{
+ "schema": 1,
+ "method": "M1_split_conformal_log1p",
+ "level": 0.9,
+ "residual": "log1p(actual PM2.5) - log1p(point forecast)",
+ "rounding": "low end rounded down, high end rounded up, to whole ug/m3 (never narrower than computed)",
+ "label": "RETROSPECTIVE calibration from past out-of-sample forecasts; a statement about past errors, not a guarantee",
+ "forecast_inputs": "archived 24 h-ahead forecast weather (Open-Meteo Previous Runs, production_default); no ERA5 substitution for the target day",
+ "windows": [
+  {
+   "block": "A",
+   "models_trained_through": "2023-12-31",
+   "forecast_days": [
+    "2024-01-01",
+    "2024-12-31"
+   ],
+   "n_days": 347
+  },
+  {
+   "block": "B",
+   "models_trained_through": "2024-12-31",
+   "forecast_days": [
+    "2025-01-01",
+    "2025-10-14"
+   ],
+   "n_days": 270
+  },
+  {
+   "block": "C",
+   "models_trained_through": "2025-10-14",
+   "forecast_days": [
+    "2025-10-15",
+    "2026-02-15"
+   ],
+   "n_days": 104
+  }
+ ],
+ "versions": {
+  "v1_25_baseline": {
+   "n": 721,
+   "first": "2024-01-20",
+   "last": "2026-02-15",
+   "lo": -0.5938378003043021,
+   "hi": 0.34449628375838004,
+   "in_sample_coverage": 0.9001386962552012,
+   "inputs_sha256": "dce6be5faa8c045b0aded0e1d6365d5573f936f5e3650b0ed7d8b6bef6d5acbc"
+  },
+  "v2_35_candidate": {
+   "n": 721,
+   "first": "2024-01-20",
+   "last": "2026-02-15",
+   "lo": -0.5064540737266467,
+   "hi": 0.31126414898032545,
+   "in_sample_coverage": 0.9001386962552012,
+   "inputs_sha256": "29106e077e62cee56843f4e4766ef14eaa28208b1f6bd9491030df99513fb156"
+  },
+  "v3_hybrid": {
+   "n": 721,
+   "first": "2024-01-20",
+   "last": "2026-02-15",
+   "lo": -0.5064540737266467,
+   "hi": 0.3074083406333794,
+   "in_sample_coverage": 0.9001386962552012,
+   "inputs_sha256": "5b11b4e7874aaa8d0d2763f3324f1e6c40ecf8ba05d1c0c64ca744b4fcb596df"
+  }
+ },
+ "calibration_id": "b3d7206aa97e",
+ "built_with": {
+  "python": "3.13.16",
+  "numpy": "2.5.3",
+  "seed": 42,
+  "builder": "experiments/prediction_range/build_calibration.py"
+ }
+}

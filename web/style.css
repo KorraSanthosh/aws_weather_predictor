@@ -32,6 +32,10 @@ main { padding-top: 20px; padding-bottom: 8px; display: grid; gap: 16px; }
 .pill.Moderate { background: var(--moderate); color: #1c2321; } .pill.Poor { background: var(--poor); color: #1c2321; }
 .pill.Very { background: var(--verypoor); } .pill.Severe { background: var(--severe); }
 .muted { color: var(--muted); margin: 4px 0; } .small { font-size: .85rem; }
+.pill.sm { font-size: .82rem; padding: 2px 10px; }
+.range { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); }
+.range-line { margin: 0 0 4px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; }
+.range-label { font-weight: 700; } .range-to { color: var(--muted); } .range-pm { margin: 0; }
 .decision-word { font-size: 2.6rem; font-weight: 800; letter-spacing: .02em; line-height: 1.1; }
 .decision-word.GO { color: var(--go); } .decision-word.CAUTION { color: var(--caution); } .decision-word.INDOOR { color: var(--indoor); }
 .headline { font-weight: 700; margin: 6px 0 2px; }

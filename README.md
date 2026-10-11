@@ -68,8 +68,9 @@ train.py also reports a 95% bootstrap interval for the gain over persistence, ca
 errors and (for short histories) a monthly walk-forward check.
 
 **How the model is evaluated:** rolling winter folds. Each fold tests on one 15 Oct → 15 Feb window with a
-model trained only on earlier days, and the results are pooled. The uncertainty range in the app comes from
-those winter errors. In winter nearly every day is Poor or worse, so "flagged Poor-or-worse" is an easy number
+model trained only on earlier days, and the results are pooled. The older `pm25_low`/`pm25_high` band in the
+forecast record comes from those winter errors (the dashboard now shows the calibrated range described under
+"Prediction range" instead). In winter nearly every day is Poor or worse, so "flagged Poor-or-worse" is an easy number
 (even "tomorrow = today" scores high). The model predicts the *change from today's PM2.5* (trees cannot
 extrapolate to winter levels they never saw), so it starts from the persistence baseline and has to beat it; judge the model mainly on MAE and AQI-category accuracy.
 
@@ -80,6 +81,35 @@ model on the untouched 2023+ test, so the model is unchanged; the document also 
 gap (expect roughly 60-64% category accuracy live). Reproduce with `python model/experiments.py dev|final`.
 The Lambda now fetches 16 days of history so any PM2.5 lag up to 14 days is available live (guarded by a test).
 CPCB portal daily files go in `data/raw/cpcb/` (`build_dataset.py` reads them).
+
+## Prediction range (90 %)
+
+Under the forecast the dashboard shows a **likely range**, e.g. "Good to Moderate (PM2.5 30–81 µg/m³)". It shows how
+uncertain the forecast is. It does **not** change the point forecast, the AQI category, the school decision or the alert.
+
+- **Method:** split-conformal ("M1") in log1p space. The offsets come from 721 *out-of-sample* forecasts (2024-01-20 →
+  2026-02-15) made by models trained only on earlier data, using archived 24 h forecast weather
+  (`core/range_calibration.json`, inputs in `experiments/prediction_range/calibration_residuals.json`).
+  Bounds are whole numbers rounded outward, so the range is never narrower than computed and every number matches its category.
+- **Where it runs:** `core/prediction_range.py`, applied by `backend/api_handler.py` when the forecast is read (from the stored
+  `pm25` and `model_version`). The nightly forecast Lambda, the stored rows and the forward-test shadow log are unchanged. If a
+  range cannot be given (unknown model version, any error) the field is simply absent. The offline demo reads
+  `web/data/range.json`, made by `python scripts/make_range_json.py`; `web/data/forecast.json` is not modified.
+- **Retrospective evidence** (calibration strictly before each test period; `experiments/prediction_range/product_check.json`):
+
+  | Test | Actual PM2.5 inside range | Actual category inside category range | Mean categories in range |
+  |---|---|---|---|
+  | Calendar 2025 (344 days) | 93.3 % computed, 95.1 % as shown (outward rounding) | 98.0 % | 2.45 / 2.48 |
+  | Winter 2025-26 (104 days) | 90.4 % | 98.1 % | 2.41 |
+
+- **What it is not:** it is not the model's accuracy. The point forecast's exact-category accuracy is 66 % (2025) and 72 %
+  (winter 2025-26), and the naive "predicted category ± 1" range already contains the actual category about 98.5 % (2025) and
+  99.0 % (winter) of the time at about 2.9 categories wide. So the 98 % above shows the range is calibrated, not that the model
+  improved. Quote the point-forecast MAE and exact-category accuracy as the model's accuracy.
+- **Limits:** ranges are wide (about 2–3 of the 6 categories); they describe past errors and are not a guarantee; the models that
+  produced the calibration residuals were retrained at each window, not the final shipped models; if the live station network or
+  weather source changes, coverage can change. Once live `actual_pm25` values accumulate in DynamoDB, check the share of days
+  inside the shown range and rebuild with `python experiments/prediction_range/build_calibration.py` if it drifts.
 
 ## Deploy to AWS
 

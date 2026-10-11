@@ -32,7 +32,13 @@ export async function loadAll() {
       history = await getJSON(local("history")).catch(() => history || []);
     }
   } else {
+    const range = getJSON(local("range")).catch(() => null);       // optional static range (scripts/make_range_json.py)
     [forecast, history] = await Promise.all([getJSON(local("forecast")), getJSON(local("history"))]);
+    const r = await range;
+    // attach only when it was made for exactly this forecast, so a stale file can never be shown against a newer one
+    if (r?.prediction_range && r.target_date === forecast.target_date && r.pm25 === forecast.pm25) {
+      forecast = { ...forecast, prediction_range: r.prediction_range };
+    }
   }
   return { forecast, history, metrics: await metrics, stations: await stations };
 }

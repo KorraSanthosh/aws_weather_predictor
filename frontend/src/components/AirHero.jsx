@@ -31,7 +31,9 @@ export default function AirHero({ forecast: f, stationsDate }) {
         <p className="eyebrow">{t("hero.delhi", { date: fmtDate(f.target_date, undefined, locale) })}</p>
         <h2 className="hero-title">{t("hero.title")}<br /><span style={{ color }}>{catName}</span></h2>
         <p className="hero-sub">
-          {t("hero.sub", { aqi: f.aqi, pm: Math.round(f.pm25), lo: Math.round(f.pm25_low), hi: Math.round(f.pm25_high) })}
+          {f.prediction_range
+            ? t("hero.subPm", { aqi: f.aqi, pm: Math.round(f.pm25) })
+            : t("hero.sub", { aqi: f.aqi, pm: Math.round(f.pm25), lo: Math.round(f.pm25_low), hi: Math.round(f.pm25_high) })}
           {stationsDate ? t("hero.stationsDay", { date: fmtDate(stationsDate, { day: "numeric", month: "short" }, locale) }) : ""}
         </p>
         <p className={`hero-decision ${f.guidance.decision}`}>{t("hero.decision")} <b>{t(`decision.${f.guidance.decision}`)}</b></p>

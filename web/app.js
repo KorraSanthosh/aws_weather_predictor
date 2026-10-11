@@ -23,8 +23,15 @@
     var cat = $("category");
     cat.textContent = forecast.category;
     cat.className = "pill " + forecast.category.split(" ")[0];
-    $("pm-range").textContent = "PM2.5 about " + Math.round(forecast.pm25) + " µg/m³ (likely " +
-      Math.round(forecast.pm25_low) + "–" + Math.round(forecast.pm25_high) + ")";
+    var pr = forecast.prediction_range;
+    if (pr) {
+      // the calibrated range is shown below; the older "likely lo-hi" figures are not repeated (two ranges would confuse)
+      $("pm-range").textContent = "PM2.5 about " + Math.round(forecast.pm25) + " µg/m³";
+      drawRange(pr);
+    } else {
+      $("pm-range").textContent = "PM2.5 about " + Math.round(forecast.pm25) + " µg/m³ (likely " +
+        Math.round(forecast.pm25_low) + "–" + Math.round(forecast.pm25_high) + ")";
+    }
     if (forecast.today_pm25 != null) {
       $("today-line").textContent = "Latest full day measured: " + Math.round(forecast.today_pm25) + " µg/m³ PM2.5.";
     }
@@ -39,6 +46,23 @@
     }
     drawChart(history || []);
     if (metrics) drawMetrics(metrics);
+  }
+
+  // Calibrated 90 % range around the forecast: uncertainty only; the category and school decision do not come from it.
+  function drawRange(pr) {
+    var host = $("range-line");
+    host.textContent = "";
+    function add(text, cls) {
+      var s = document.createElement("span");
+      s.textContent = text; if (cls) s.className = cls;
+      host.appendChild(s); return s;
+    }
+    function pill(cat) { add(cat, "pill sm " + cat.split(" ")[0]); }
+    add("Likely range:", "range-label");
+    pill(pr.category_low);
+    if (pr.category_high !== pr.category_low) { add("to", "range-to"); pill(pr.category_high); }
+    add("(PM2.5 " + pr.pm25_low + "–" + pr.pm25_high + " µg/m³)", "muted range-pm");
+    $("range").hidden = false;
   }
 
   function drawChart(rows) {
@@ -197,7 +221,13 @@
   if (API) {
     main = getJSON(API + "/forecast").then(function (d) { return [d.forecast, d.history]; });
   } else {
-    main = Promise.all([getJSON("data/forecast.json"), getJSON("data/history.json")]);
+    var rangeP = getJSON("data/range.json").catch(function () { return null; });   // optional (scripts/make_range_json.py)
+    main = Promise.all([getJSON("data/forecast.json"), getJSON("data/history.json"), rangeP]).then(function (r) {
+      var fc = r[0], rg = r[2];
+      // attach only when it was made for exactly this forecast, so a stale file is never shown against a newer one
+      if (rg && rg.prediction_range && rg.target_date === fc.target_date && rg.pm25 === fc.pm25) fc.prediction_range = rg.prediction_range;
+      return [fc, r[1]];
+    });
   }
   Promise.all([main, metricsP]).then(function (res) {
     var fc = res[0][0], hist = res[0][1], metrics = res[1];
