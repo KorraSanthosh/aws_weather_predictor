@@ -45,7 +45,8 @@ python pipeline/backfill_openaq_api.py --start 2022-01-01   # older history via 
                                                             # reaches back to ~Feb 2025 for these stations)
 python pipeline/download_weather.py --start 2022-01-01  # Open-Meteo weather + CAMS benchmark
 python pipeline/build_dataset.py              # data-quality report -> data/daily.csv
-python model/train.py                         # metrics + model + website demo data
+python model/train.py --version v1_25_baseline   # writes model/v1_25_baseline/ (never overwrites; add --promote to make it the default)
+# two model versions are stored side by side - see model/MODEL_VERSIONS.md (v1 baseline = default, v2 candidate = experimental)
 python -m pytest -q
 ```
 
@@ -62,7 +63,7 @@ thing throughout; the Lambda applies the same rule.
 `config/stations_history.json` (stations with data from before Oct 2022, even if they stopped reporting).
 Then `python pipeline/download_openaq.py --stations config/stations_history.json --start 2018-01-01`,
 `python pipeline/download_weather.py --start 2018-01-01`, `python pipeline/build_dataset.py`,
-`python model/train.py`. With 2+ earlier winters train.py switches to full-winter folds on its own.
+`python model/train.py --version v1_25_baseline --force --promote` (re-trains the default). With 2+ earlier winters train.py switches to full-winter folds on its own.
 train.py also reports a 95% bootstrap interval for the gain over persistence, calm vs spike days, per-month
 errors and (for short histories) a monthly walk-forward check.
 

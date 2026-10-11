@@ -1,0 +1,242 @@
+{
+ "point": {
+  "latitude": 28.6139,
+  "longitude": 77.209
+ },
+ "period": [
+  "2024-01-01",
+  "2026-02-16"
+ ],
+ "models": {
+  "production_default": {
+   "model_id": "(default: best_match)",
+   "lead1": {
+    "hours": 18672,
+    "non_null_hours": 18223,
+    "first_valid": "2024-01-19T17:00",
+    "last_valid": "2026-02-16T23:00",
+    "months_below_90pct_filled": [
+     "2024-01"
+    ]
+   },
+   "lead2": {
+    "hours": 18672,
+    "non_null_hours": 18199,
+    "first_valid": "2024-01-20T17:00",
+    "last_valid": "2026-02-16T23:00",
+    "months_below_90pct_filled": [
+     "2024-01"
+    ]
+   },
+   "grid_point": {
+    "latitude": 28.576448,
+    "longitude": 77.18678,
+    "elevation": 214.0
+   },
+   "units": "\u00b0C"
+  },
+  "ecmwf_ifs_hres": {
+   "model_id": "ecmwf_ifs",
+   "lead1": {
+    "hours": 18672,
+    "non_null_hours": 3331,
+    "first_valid": "2025-10-01T05:00",
+    "last_valid": "2026-02-16T23:00",
+    "months_below_90pct_filled": [
+     "2024-01",
+     "2024-02",
+     "2024-03",
+     "2024-04",
+     "2024-05",
+     "2024-06",
+     "2024-07",
+     "2024-08",
+     "2024-09",
+     "2024-10",
+     "2024-11",
+     "2024-12",
+     "2025-01",
+     "2025-02",
+     "2025-03",
+     "2025-04",
+     "2025-05",
+     "2025-06",
+     "2025-07",
+     "2025-08",
+     "2025-09"
+    ]
+   },
+   "lead2": {
+    "hours": 18672,
+    "non_null_hours": 3404,
+    "first_valid": "2025-01-03T05:00",
+    "last_valid": "2026-02-16T23:00",
+    "months_below_90pct_filled": [
+     "2024-01",
+     "2024-02",
+     "2024-03",
+     "2024-04",
+     "2024-05",
+     "2024-06",
+     "2024-07",
+     "2024-08",
+     "2024-09",
+     "2024-10",
+     "2024-11",
+     "2024-12",
+     "2025-01",
+     "2025-02",
+     "2025-03",
+     "2025-04",
+     "2025-05",
+     "2025-06",
+     "2025-07",
+     "2025-08",
+     "2025-09"
+    ]
+   },
+   "grid_point": {
+    "latitude": 28.576448,
+    "longitude": 77.18678,
+    "elevation": 214.0
+   },
+   "units": "\u00b0C"
+  },
+  "ecmwf_ifs025": {
+   "model_id": "ecmwf_ifs025",
+   "lead1": {
+    "hours": 18672,
+    "non_null_hours": 17851,
+    "first_valid": "2024-02-04T05:00",
+    "last_valid": "2026-02-16T23:00",
+    "months_below_90pct_filled": [
+     "2024-01",
+     "2024-02"
+    ]
+   },
+   "lead2": {
+    "hours": 18672,
+    "non_null_hours": 17827,
+    "first_valid": "2024-02-05T05:00",
+    "last_valid": "2026-02-16T23:00",
+    "months_below_90pct_filled": [
+     "2024-01",
+     "2024-02"
+    ]
+   },
+   "grid_point": {
+    "latitude": 28.5,
+    "longitude": 77.25,
+    "elevation": 214.0
+   },
+   "units": "\u00b0C"
+  },
+  "gfs_global": {
+   "model_id": "gfs_global",
+   "lead1": {
+    "hours": 18672,
+    "non_null_hours": 18223,
+    "first_valid": "2024-01-19T17:00",
+    "last_valid": "2026-02-16T23:00",
+    "months_below_90pct_filled": [
+     "2024-01"
+    ]
+   },
+   "lead2": {
+    "hours": 18672,
+    "non_null_hours": 18199,
+    "first_valid": "2024-01-20T17:00",
+    "last_valid": "2026-02-16T23:00",
+    "months_below_90pct_filled": [
+     "2024-01"
+    ]
+   },
+   "grid_point": {
+    "latitude": 28.64302,
+    "longitude": 77.22656,
+    "elevation": 214.0
+   },
+   "units": "\u00b0C"
+  },
+  "icon_global": {
+   "model_id": "icon_global",
+   "lead1": {
+    "hours": 18672,
+    "non_null_hours": 18223,
+    "first_valid": "2024-01-19T17:00",
+    "last_valid": "2026-02-16T23:00",
+    "months_below_90pct_filled": [
+     "2024-01"
+    ]
+   },
+   "lead2": {
+    "hours": 18672,
+    "non_null_hours": 18199,
+    "first_valid": "2024-01-20T17:00",
+    "last_valid": "2026-02-16T23:00",
+    "months_below_90pct_filled": [
+     "2024-01"
+    ]
+   },
+   "grid_point": {
+    "latitude": 28.625,
+    "longitude": 77.25,
+    "elevation": 214.0
+   },
+   "units": "\u00b0C"
+  },
+  "ecmwf_aifs025": {
+   "model_id": "ecmwf_aifs025_single",
+   "lead1": {
+    "hours": 18672,
+    "non_null_hours": 8731,
+    "first_valid": "2025-02-18T05:00",
+    "last_valid": "2026-02-16T23:00",
+    "months_below_90pct_filled": [
+     "2024-01",
+     "2024-02",
+     "2024-03",
+     "2024-04",
+     "2024-05",
+     "2024-06",
+     "2024-07",
+     "2024-08",
+     "2024-09",
+     "2024-10",
+     "2024-11",
+     "2024-12",
+     "2025-01",
+     "2025-02"
+    ]
+   },
+   "lead2": {
+    "hours": 18672,
+    "non_null_hours": 8707,
+    "first_valid": "2025-02-19T05:00",
+    "last_valid": "2026-02-16T23:00",
+    "months_below_90pct_filled": [
+     "2024-01",
+     "2024-02",
+     "2024-03",
+     "2024-04",
+     "2024-05",
+     "2024-06",
+     "2024-07",
+     "2024-08",
+     "2024-09",
+     "2024-10",
+     "2024-11",
+     "2024-12",
+     "2025-01",
+     "2025-02"
+    ]
+   },
+   "grid_point": {
+    "latitude": 28.5,
+    "longitude": 77.25,
+    "elevation": 214.0
+   },
+   "units": "\u00b0C"
+  }
+ }
+}

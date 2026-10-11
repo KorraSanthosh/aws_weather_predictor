@@ -1,0 +1,56 @@
+{
+  "title": "CatBoost vs XGBoost for next-day Delhi PM2.5 (isolated, retrospective experiment)",
+  "declared_before_running": true,
+  "data": {
+    "primary_daily_csv": "data/daily_opencity.csv",
+    "primary_extra_sources": ["opencity_hourly"],
+    "primary_why": "production data plus OpenCity gap-fill: gives hourly day-part inputs for the 2024-25 winter, so V2 / Hybrid can be compared",
+    "secondary_daily_csv": "data/daily.csv",
+    "secondary_extra_sources": [],
+    "secondary_why": "exactly the data the deployed models were trained on (sensitivity check, first test only)"
+  },
+  "features": {"v1": "v1_25_baseline (25 features, unchanged)", "v2": "v2_35_candidate (35 features incl. 7 day-part, unchanged)",
+               "hybrid": "V2 when all 7 day-part inputs are finite, else V1 (core/hybrid.py, unchanged)",
+               "note": "CatBoost gets the same feature lists. No categorical features are declared, no feature is added or removed."},
+  "target": "log1p(PM2.5 tomorrow) - log1p(PM2.5 today); prediction = expm1(log1p(today) + model output)",
+  "training_rows": "forecast origins whose TARGET date is before the window start; weather = observed (ERA5 archive) weather of the target day, as in the production recipe",
+  "validation_split": "last 60 training rows (chronological) are the early-stopping set for every model, XGBoost and CatBoost alike",
+  "missing_values": "no imputation anywhere; day-part NaN stay NaN (both libraries handle NaN natively)",
+  "tuning": {
+    "cutoff_target_date_exclusive": "2022-10-15",
+    "why_cutoff": "the first scored winter starts 2022-10-15; tuning rows are strictly earlier, so no test period is ever seen during tuning",
+    "method": "blocked forward-chaining cross-validation (sklearn TimeSeriesSplit, 6 folds, never shuffled), features = v1 25, weather = observed (the dev years have no forecast archive and no hourly day-parts)",
+    "selection_metric": "pooled out-of-fold MAE in ug/m3",
+    "grid": {"depth": [4, 6], "learning_rate": [0.03, 0.06], "l2_leaf_reg": [3, 10], "bootstrap": ["Bayesian", "Bernoulli"]},
+    "fixed": {"iterations": 800, "od_wait": 40, "bernoulli_subsample": 0.85, "loss_function": "RMSE"},
+    "baseline_config": {"depth": 4, "learning_rate": 0.03, "l2_leaf_reg": 3, "bootstrap": "Bayesian"},
+    "baseline_why": "mirrors the XGBoost recipe (800 trees max, lr 0.03, depth 4) with CatBoost's own default regularisation",
+    "tuned_config": "the grid member with the lowest pooled out-of-fold MAE (ties within 0.1 percent go to the baseline-like, shallower, slower one)",
+    "xgboost_reference": "production XGBoost recipe scored with the same folds, for comparison only (never tuned)"
+  },
+  "test": {
+    "frozen_fit": "one fit per window on rows with target before the window start; no refit, no early stopping on test days",
+    "T1_primary": {"windows": ["15 Oct Y -> 15 Feb Y+1 for Y = 2022, 2023, 2024, 2025"], "weather": "tomorrow's weather := today's observed weather (leak-free persistence of weather)",
+                   "why": "same regime as the existing back-test PRIMARY; contains no future observed weather"},
+    "T2_live_like": {"windows": ["2024-25", "2025-26"], "weather": "archived 24 h-ahead forecast of tomorrow's weather (Open-Meteo Previous Runs)",
+                     "why": "the live Lambda receives a forecast; archive exists from 2024-01-20 only"},
+    "T3_all_season": {"train_before": "2025-01-01", "test": "2025-01-01 -> 2026-10-07", "weather": "persistence", "why": "covers all four IMD seasons; fit is up to 21 months old by the end"},
+    "never_used": "tomorrow's OBSERVED weather as a test input; anything after 2026-10-07; winter 2026-27",
+    "seeds": [42, 7, 123, 2024, 99], "primary_seed": 42,
+    "sudden_change_threshold": 0.30,
+    "bootstrap": {"kind": "moving-block, overlapping blocks, 7 days (14-day sensitivity)", "n_boot": 5000, "seed": 0, "level": 0.95}
+  },
+  "decision_rule": {
+    "primary_comparison": "tuned CatBoost Hybrid vs XGBoost Hybrid, T1, primary data, seed 42",
+    "recommend_further_testing_only_if_all": [
+      "pooled MAE at least 2 percent lower than XGBoost Hybrid",
+      "95 percent interval of the MAE difference entirely below zero for BOTH 7- and 14-day blocks",
+      "no single winter more than 2 percent worse",
+      "exact-category accuracy not lower by more than 2 percentage points",
+      "tuned CatBoost pooled out-of-fold MAE on the development folds not worse than XGBoost's (no benefit that exists only on already-examined winters)"
+    ],
+    "otherwise": "no evidence of improvement; keep XGBoost; CatBoost stays a documented reference only",
+    "multiplicity": "one primary comparison; every other comparison in the report is descriptive",
+    "never": "promote to production, change the default, retrain stored models, commit, push or deploy"
+  }
+}

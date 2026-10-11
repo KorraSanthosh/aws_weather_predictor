@@ -1,0 +1,178 @@
+{
+ "api": "https://air-quality-api.open-meteo.com/v1/air-quality",
+ "point": [
+  28.6139,
+  77.209
+ ],
+ "requests": [
+  {
+   "period": [
+    "2022-09-01",
+    "2022-09-03"
+   ],
+   "pm2_5": {
+    "non_null": 72,
+    "hours": 72
+   },
+   "pm2_5_previous_day1": {
+    "non_null": 0,
+    "hours": 72
+   },
+   "pm2_5_previous_day2": {
+    "non_null": 0,
+    "hours": 72
+   }
+  },
+  {
+   "period": [
+    "2023-01-01",
+    "2023-01-03"
+   ],
+   "pm2_5": {
+    "non_null": 72,
+    "hours": 72
+   },
+   "pm2_5_previous_day1": {
+    "non_null": 0,
+    "hours": 72
+   },
+   "pm2_5_previous_day2": {
+    "non_null": 0,
+    "hours": 72
+   }
+  },
+  {
+   "period": [
+    "2024-06-01",
+    "2024-06-03"
+   ],
+   "pm2_5": {
+    "non_null": 72,
+    "hours": 72
+   },
+   "pm2_5_previous_day1": {
+    "non_null": 0,
+    "hours": 72
+   },
+   "pm2_5_previous_day2": {
+    "non_null": 0,
+    "hours": 72
+   }
+  },
+  {
+   "period": [
+    "2025-01-10",
+    "2025-01-12"
+   ],
+   "pm2_5": {
+    "non_null": 72,
+    "hours": 72
+   },
+   "pm2_5_previous_day1": {
+    "non_null": 0,
+    "hours": 72
+   },
+   "pm2_5_previous_day2": {
+    "non_null": 0,
+    "hours": 72
+   }
+  },
+  {
+   "period": [
+    "2025-10-01",
+    "2025-10-05"
+   ],
+   "pm2_5": {
+    "non_null": 120,
+    "hours": 120
+   },
+   "pm2_5_previous_day1": {
+    "non_null": 0,
+    "hours": 120
+   },
+   "pm2_5_previous_day2": {
+    "non_null": 0,
+    "hours": 120
+   }
+  },
+  {
+   "period": [
+    "2026-01-01",
+    "2026-01-05"
+   ],
+   "pm2_5": {
+    "non_null": 120,
+    "hours": 120
+   },
+   "pm2_5_previous_day1": {
+    "non_null": 0,
+    "hours": 120
+   },
+   "pm2_5_previous_day2": {
+    "non_null": 0,
+    "hours": 120
+   }
+  },
+  {
+   "period": [
+    "2026-04-01",
+    "2026-04-05"
+   ],
+   "pm2_5": {
+    "non_null": 120,
+    "hours": 120
+   },
+   "pm2_5_previous_day1": {
+    "non_null": 0,
+    "hours": 120
+   },
+   "pm2_5_previous_day2": {
+    "non_null": 0,
+    "hours": 120
+   }
+  },
+  {
+   "period": [
+    "2026-07-01",
+    "2026-07-05"
+   ],
+   "pm2_5": {
+    "non_null": 120,
+    "hours": 120
+   },
+   "pm2_5_previous_day1": {
+    "non_null": 0,
+    "hours": 120
+   },
+   "pm2_5_previous_day2": {
+    "non_null": 0,
+    "hours": 120
+   }
+  },
+  {
+   "period": [
+    "2026-10-01",
+    "2026-10-08"
+   ],
+   "pm2_5": {
+    "non_null": 192,
+    "hours": 192
+   },
+   "pm2_5_previous_day1": {
+    "non_null": 0,
+    "hours": 192
+   },
+   "pm2_5_previous_day2": {
+    "non_null": 0,
+    "hours": 192
+   }
+  }
+ ],
+ "previous_runs_air_quality_endpoint": "GET https://previous-runs-api.open-meteo.com/v1/air-quality failed after 1 tries: HTTP Err",
+ "summary": {
+  "periods_answered": 9,
+  "periods_failed_network": 0,
+  "pm2_5_has_values_in_all_answered": true,
+  "previous_day_values_present_anywhere": false
+ }
+}

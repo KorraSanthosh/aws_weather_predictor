@@ -1,0 +1,176 @@
+{
+ "235": {
+  "file": "del-anand-vihar-dpcc-2024-25.csv",
+  "vs_openaq_hourly_by_shift_hours": {
+   "0.0": {
+    "hours": 3337,
+    "corr": 0.426,
+    "mean_abs_diff": 33.2
+   },
+   "-5.0": {
+    "hours": 3367,
+    "corr": 0.966,
+    "mean_abs_diff": 7.7
+   },
+   "-5.5": {
+    "hours": 3416,
+    "corr": 0.997,
+    "mean_abs_diff": 0.9
+   },
+   "-6.0": {
+    "hours": 3369,
+    "corr": 0.96,
+    "mean_abs_diff": 8.0
+   },
+   "5.5": {
+    "hours": 3365,
+    "corr": 0.184,
+    "mean_abs_diff": 38.3
+   }
+  },
+  "best_shift_vs_openaq": "-5.5",
+  "vs_cpcb_daily_files_2024": {
+   "label_is_IST": {
+    "days": 291,
+    "corr": 1.0,
+    "mean_abs_diff": 0.0
+   },
+   "label_is_UTC": {
+    "days": 292,
+    "corr": 0.988,
+    "mean_abs_diff": 11.08
+   }
+  }
+ },
+ "50": {
+  "file": "del-punjabi-bagh-dpcc-2024-25.csv",
+  "vs_openaq_hourly_by_shift_hours": {
+   "0.0": {
+    "hours": 3100,
+    "corr": 0.491,
+    "mean_abs_diff": 32.7
+   },
+   "-5.0": {
+    "hours": 3151,
+    "corr": 0.981,
+    "mean_abs_diff": 6.5
+   },
+   "-5.5": {
+    "hours": 3266,
+    "corr": 0.997,
+    "mean_abs_diff": 0.8
+   },
+   "-6.0": {
+    "hours": 3150,
+    "corr": 0.976,
+    "mean_abs_diff": 6.9
+   },
+   "5.5": {
+    "hours": 3177,
+    "corr": 0.17,
+    "mean_abs_diff": 40.2
+   }
+  },
+  "best_shift_vs_openaq": "-5.5",
+  "vs_cpcb_daily_files_2024": {
+   "label_is_IST": {
+    "days": 356,
+    "corr": 1.0,
+    "mean_abs_diff": 0.0
+   },
+   "label_is_UTC": {
+    "days": 358,
+    "corr": 0.99,
+    "mean_abs_diff": 8.17
+   }
+  }
+ },
+ "17": {
+  "file": "del-r-k-puram-dpcc-2024-25.csv",
+  "vs_openaq_hourly_by_shift_hours": {
+   "0.0": {
+    "hours": 3059,
+    "corr": 0.266,
+    "mean_abs_diff": 34.4
+   },
+   "-5.0": {
+    "hours": 3092,
+    "corr": 0.961,
+    "mean_abs_diff": 6.9
+   },
+   "-5.5": {
+    "hours": 3187,
+    "corr": 0.947,
+    "mean_abs_diff": 1.8
+   },
+   "-6.0": {
+    "hours": 3095,
+    "corr": 0.921,
+    "mean_abs_diff": 7.8
+   },
+   "5.5": {
+    "hours": 3137,
+    "corr": 0.096,
+    "mean_abs_diff": 39.6
+   }
+  },
+  "best_shift_vs_openaq": "-5.0",
+  "vs_cpcb_daily_files_2024": {
+   "label_is_IST": {
+    "days": 352,
+    "corr": 1.0,
+    "mean_abs_diff": 0.0
+   },
+   "label_is_UTC": {
+    "days": 351,
+    "corr": 0.981,
+    "mean_abs_diff": 10.4
+   }
+  }
+ },
+ "10831": {
+  "file": "del-rohini-dpcc-2024-25.csv",
+  "vs_openaq_hourly_by_shift_hours": {
+   "0.0": {
+    "hours": 3356,
+    "corr": 0.431,
+    "mean_abs_diff": 35.0
+   },
+   "-5.0": {
+    "hours": 3375,
+    "corr": 0.965,
+    "mean_abs_diff": 7.8
+   },
+   "-5.5": {
+    "hours": 3404,
+    "corr": 0.997,
+    "mean_abs_diff": 0.8
+   },
+   "-6.0": {
+    "hours": 3374,
+    "corr": 0.982,
+    "mean_abs_diff": 5.6
+   },
+   "5.5": {
+    "hours": 3373,
+    "corr": 0.066,
+    "mean_abs_diff": 45.2
+   }
+  },
+  "best_shift_vs_openaq": "-5.5",
+  "vs_cpcb_daily_files_2024": {
+   "label_is_IST": {
+    "days": 354,
+    "corr": 1.0,
+    "mean_abs_diff": 0.0
+   },
+   "label_is_UTC": {
+    "days": 355,
+    "corr": 0.992,
+    "mean_abs_diff": 8.06
+   }
+  }
+ },
+ "decision": "labels are IST wall-clock time (the +0000 suffix is wrong)",
+ "note": "OpenAQ R K Puram (17) peaks at -5.0 h instead of -5.5 h against OpenAQ, while its CPCB daily match is exact for the IST reading, so that is a quirk of the OpenAQ series, not of the OpenCity file."
+}

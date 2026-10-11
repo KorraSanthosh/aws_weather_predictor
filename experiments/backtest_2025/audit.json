@@ -1,0 +1,538 @@
+{
+ "file": "data/daily_opencity.csv",
+ "meta": {
+  "source": "openaq",
+  "stations": [
+   "10831",
+   "17",
+   "235",
+   "236",
+   "2503",
+   "431",
+   "50",
+   "5404",
+   "5613",
+   "6358",
+   "6931",
+   "6932",
+   "8239"
+  ],
+  "first": "2018-01-04",
+  "last": "2026-10-07",
+  "days_with_pm25": 1873,
+  "calendar_days": 3199,
+  "min_stations": 3,
+  "excluded_ranges": [
+   "2020-03-25:2020-06-30"
+  ],
+  "days_excluded": 44,
+  "days_dropped_too_few_stations": 461
+ },
+ "min_stations_rule": 3,
+ "first_row": "2018-01-04",
+ "last_row": "2026-10-07",
+ "first_weather_day": "2018-01-01",
+ "last_weather_day": "2026-10-08",
+ "years": {
+  "2012": {
+   "calendar_days": 366,
+   "days_with_city_pm25_ge3_stations": 0,
+   "share": 0.0,
+   "days_with_complete_weather": 0,
+   "stations_per_day_min_median_max": null,
+   "days_by_month": {
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
+    "8": 0,
+    "9": 0,
+    "10": 0,
+    "11": 0,
+    "12": 0
+   },
+   "has_genuine_usable_pm25": false
+  },
+  "2013": {
+   "calendar_days": 365,
+   "days_with_city_pm25_ge3_stations": 0,
+   "share": 0.0,
+   "days_with_complete_weather": 0,
+   "stations_per_day_min_median_max": null,
+   "days_by_month": {
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
+    "8": 0,
+    "9": 0,
+    "10": 0,
+    "11": 0,
+    "12": 0
+   },
+   "has_genuine_usable_pm25": false
+  },
+  "2014": {
+   "calendar_days": 365,
+   "days_with_city_pm25_ge3_stations": 0,
+   "share": 0.0,
+   "days_with_complete_weather": 0,
+   "stations_per_day_min_median_max": null,
+   "days_by_month": {
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
+    "8": 0,
+    "9": 0,
+    "10": 0,
+    "11": 0,
+    "12": 0
+   },
+   "has_genuine_usable_pm25": false
+  },
+  "2015": {
+   "calendar_days": 365,
+   "days_with_city_pm25_ge3_stations": 0,
+   "share": 0.0,
+   "days_with_complete_weather": 0,
+   "stations_per_day_min_median_max": null,
+   "days_by_month": {
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
+    "8": 0,
+    "9": 0,
+    "10": 0,
+    "11": 0,
+    "12": 0
+   },
+   "has_genuine_usable_pm25": false
+  },
+  "2016": {
+   "calendar_days": 366,
+   "days_with_city_pm25_ge3_stations": 0,
+   "share": 0.0,
+   "days_with_complete_weather": 0,
+   "stations_per_day_min_median_max": null,
+   "days_by_month": {
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
+    "8": 0,
+    "9": 0,
+    "10": 0,
+    "11": 0,
+    "12": 0
+   },
+   "has_genuine_usable_pm25": false
+  },
+  "2017": {
+   "calendar_days": 365,
+   "days_with_city_pm25_ge3_stations": 0,
+   "share": 0.0,
+   "days_with_complete_weather": 0,
+   "stations_per_day_min_median_max": null,
+   "days_by_month": {
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
+    "8": 0,
+    "9": 0,
+    "10": 0,
+    "11": 0,
+    "12": 0
+   },
+   "has_genuine_usable_pm25": false
+  },
+  "2018": {
+   "calendar_days": 365,
+   "days_with_city_pm25_ge3_stations": 97,
+   "share": 0.266,
+   "days_with_complete_weather": 365,
+   "stations_per_day_min_median_max": [
+    3,
+    4,
+    6
+   ],
+   "days_by_month": {
+    "1": 12,
+    "2": 12,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
+    "8": 9,
+    "9": 20,
+    "10": 21,
+    "11": 16,
+    "12": 7
+   },
+   "has_genuine_usable_pm25": true
+  },
+  "2019": {
+   "calendar_days": 365,
+   "days_with_city_pm25_ge3_stations": 165,
+   "share": 0.452,
+   "days_with_complete_weather": 365,
+   "stations_per_day_min_median_max": [
+    3,
+    6,
+    6
+   ],
+   "days_by_month": {
+    "1": 1,
+    "2": 2,
+    "3": 0,
+    "4": 3,
+    "5": 2,
+    "6": 0,
+    "7": 20,
+    "8": 29,
+    "9": 30,
+    "10": 28,
+    "11": 19,
+    "12": 31
+   },
+   "has_genuine_usable_pm25": true
+  },
+  "2020": {
+   "calendar_days": 366,
+   "days_with_city_pm25_ge3_stations": 98,
+   "share": 0.268,
+   "days_with_complete_weather": 366,
+   "stations_per_day_min_median_max": [
+    3,
+    5,
+    6
+   ],
+   "days_by_month": {
+    "1": 31,
+    "2": 29,
+    "3": 23,
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 8,
+    "8": 1,
+    "9": 0,
+    "10": 4,
+    "11": 2,
+    "12": 0
+   },
+   "has_genuine_usable_pm25": true
+  },
+  "2021": {
+   "calendar_days": 365,
+   "days_with_city_pm25_ge3_stations": 93,
+   "share": 0.255,
+   "days_with_complete_weather": 365,
+   "stations_per_day_min_median_max": [
+    3,
+    5,
+    5
+   ],
+   "days_by_month": {
+    "1": 11,
+    "2": 3,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
+    "8": 0,
+    "9": 13,
+    "10": 18,
+    "11": 30,
+    "12": 18
+   },
+   "has_genuine_usable_pm25": true
+  },
+  "2022": {
+   "calendar_days": 365,
+   "days_with_city_pm25_ge3_stations": 86,
+   "share": 0.236,
+   "days_with_complete_weather": 365,
+   "stations_per_day_min_median_max": [
+    3,
+    4,
+    6
+   ],
+   "days_by_month": {
+    "1": 4,
+    "2": 1,
+    "3": 5,
+    "4": 25,
+    "5": 25,
+    "6": 5,
+    "7": 0,
+    "8": 0,
+    "9": 8,
+    "10": 13,
+    "11": 0,
+    "12": 0
+   },
+   "has_genuine_usable_pm25": true
+  },
+  "2023": {
+   "calendar_days": 365,
+   "days_with_city_pm25_ge3_stations": 359,
+   "share": 0.984,
+   "days_with_complete_weather": 365,
+   "stations_per_day_min_median_max": [
+    3,
+    4,
+    4
+   ],
+   "days_by_month": {
+    "1": 31,
+    "2": 28,
+    "3": 31,
+    "4": 30,
+    "5": 31,
+    "6": 30,
+    "7": 25,
+    "8": 31,
+    "9": 30,
+    "10": 31,
+    "11": 30,
+    "12": 31
+   },
+   "has_genuine_usable_pm25": true
+  },
+  "2024": {
+   "calendar_days": 366,
+   "days_with_city_pm25_ge3_stations": 366,
+   "share": 1.0,
+   "days_with_complete_weather": 366,
+   "stations_per_day_min_median_max": [
+    3,
+    4,
+    4
+   ],
+   "days_by_month": {
+    "1": 31,
+    "2": 29,
+    "3": 31,
+    "4": 30,
+    "5": 31,
+    "6": 30,
+    "7": 31,
+    "8": 31,
+    "9": 30,
+    "10": 31,
+    "11": 30,
+    "12": 31
+   },
+   "has_genuine_usable_pm25": true
+  },
+  "2025": {
+   "calendar_days": 365,
+   "days_with_city_pm25_ge3_stations": 354,
+   "share": 0.97,
+   "days_with_complete_weather": 365,
+   "stations_per_day_min_median_max": [
+    3,
+    9,
+    10
+   ],
+   "days_by_month": {
+    "1": 31,
+    "2": 28,
+    "3": 31,
+    "4": 25,
+    "5": 30,
+    "6": 27,
+    "7": 31,
+    "8": 31,
+    "9": 30,
+    "10": 30,
+    "11": 29,
+    "12": 31
+   },
+   "has_genuine_usable_pm25": true
+  }
+ },
+ "no_pm25_before": "2018-01-04",
+ "excluded_ranges_in_build": [
+  "2020-03-25:2020-06-30"
+ ],
+ "station_days_by_source_and_year": {
+  "openaq/10831": {
+   "2018": 106,
+   "2019": 172,
+   "2020": 303,
+   "2021": 142,
+   "2022": 101,
+   "2025": 315,
+   "2026": 264
+  },
+  "openaq/17": {
+   "2018": 49,
+   "2025": 312,
+   "2026": 264
+  },
+  "openaq/235": {
+   "2018": 49,
+   "2025": 315,
+   "2026": 262
+  },
+  "openaq/236": {
+   "2018": 47
+  },
+  "openaq/2503": {
+   "2018": 53
+  },
+  "openaq/431": {
+   "2018": 53
+  },
+  "openaq/50": {
+   "2018": 48,
+   "2025": 309,
+   "2026": 264
+  },
+  "openaq/5404": {
+   "2025": 302,
+   "2026": 244
+  },
+  "openaq/5613": {
+   "2018": 143,
+   "2019": 170,
+   "2020": 19,
+   "2025": 313,
+   "2026": 260
+  },
+  "openaq/6358": {
+   "2018": 101,
+   "2019": 175,
+   "2020": 347,
+   "2021": 269,
+   "2022": 125,
+   "2025": 314,
+   "2026": 265
+  },
+  "openaq/6931": {
+   "2018": 109,
+   "2019": 195,
+   "2020": 323,
+   "2021": 219,
+   "2022": 110,
+   "2025": 312,
+   "2026": 266
+  },
+  "openaq/6932": {
+   "2018": 10,
+   "2019": 189,
+   "2020": 327,
+   "2021": 220,
+   "2022": 125,
+   "2025": 315,
+   "2026": 258
+  },
+  "openaq/8239": {
+   "2018": 11,
+   "2019": 171,
+   "2020": 305,
+   "2021": 216,
+   "2022": 126,
+   "2025": 315,
+   "2026": 264
+  },
+  "openaq_api/10831": {
+   "2025": 1
+  },
+  "openaq_api/6932": {
+   "2021": 1,
+   "2022": 184
+  },
+  "openaq_recent/10831": {
+   "2026": 5
+  },
+  "openaq_recent/17": {
+   "2026": 5
+  },
+  "openaq_recent/235": {
+   "2026": 5
+  },
+  "openaq_recent/5404": {
+   "2026": 5
+  },
+  "openaq_recent/6358": {
+   "2026": 5
+  },
+  "openaq_recent/6931": {
+   "2026": 5
+  },
+  "openaq_recent/8239": {
+   "2026": 5
+  },
+  "opencity_hourly/10831": {
+   "2024": 361,
+   "2025": 50
+  },
+  "opencity_hourly/17": {
+   "2024": 364,
+   "2025": 52
+  },
+  "opencity_hourly/235": {
+   "2024": 344,
+   "2025": 48
+  },
+  "opencity_hourly/50": {
+   "2024": 366,
+   "2025": 50
+  },
+  "cpcb/Raw_Data_2022_site_301_anand_vihar_delhi_dpcc_1D": {
+   "2022": 365
+  },
+  "cpcb/Raw_Data_2023_site_124_r_k_puram_delhi_dpcc_1D": {
+   "2023": 359
+  },
+  "cpcb/Raw_Data_2023_site_125_punjabi_bagh_delhi_dpcc_1D": {
+   "2023": 359
+  },
+  "cpcb/Raw_Data_2023_site_1430_rohini_delhi_dpcc_1D": {
+   "2023": 359
+  },
+  "cpcb/Raw_Data_2023_site_301_anand_vihar_delhi_dpcc_1D": {
+   "2023": 355
+  },
+  "cpcb/Raw_Data_2024_site_124_r_k_puram_delhi_dpcc_1D": {
+   "2024": 364
+  },
+  "cpcb/Raw_Data_2024_site_125_punjabi_bagh_delhi_dpcc_1D": {
+   "2024": 366
+  },
+  "cpcb/Raw_Data_2024_site_1430_rohini_delhi_dpcc_1D": {
+   "2024": 361
+  },
+  "cpcb/Raw_Data_2024_site_301_anand_vihar_delhi_dpcc_1D": {
+   "2024": 344
+  },
+  "cpcb/Raw_Data_2025_site_301_anand_vihar_delhi_dpcc_1D": {
+   "2025": 363
+  }
+ }
+}

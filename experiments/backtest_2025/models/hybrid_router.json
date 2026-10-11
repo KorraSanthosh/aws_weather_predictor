@@ -1,0 +1,8 @@
+{
+ "rule": "use V2 if all 7 day-part inputs are finite, else V1 (option_screen.hybrid)",
+ "uses": [
+  "v1_seed42.json",
+  "v2_seed42.json"
+ ],
+ "trained_on_targets_through": "2024-12-31"
+}
