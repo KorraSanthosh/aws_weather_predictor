@@ -21,12 +21,16 @@ Website (Amplify) ─► API Gateway (HTTP API) ─► Lambda ─► DynamoDB
 
 ## What is verified and what is not (read this first)
 
+Status on 11 October 2026.
+
 | Part | Status |
 |---|---|
-| AQI conversion, daily aggregation, features (no-leakage), forecast Lambda logic, API handler, dashboard JS | **Tested** (24 unit tests + browser-simulation run) on synthetic/faked data |
-| Training script | **Runs end to end** — but only on SYNTHETIC data so far. Real accuracy is unknown until you run it on real data |
-| OpenAQ station search, S3 archive download, OpenAQ v3 API calls, Open-Meteo calls | **Written from the public docs, never run against the live services** (the build sandbox had no access). Expect to fix small things on day one |
-| SAM template, Lambda packaging, Amplify deploy | **Not deployed/tested** |
+| AQI conversion, daily aggregation, features (no leakage), forecast Lambda logic, API handler, dashboard JS | **Tested.** The test suite (`python -m pytest -q`) covers them on faked inputs, including a known-answer check of the stored models and tests that future data cannot reach the features |
+| Data and training | **Run on real data.** `data/daily.csv` is real OpenAQ ground-station PM2.5 (1,823 days, 2018-01-04 to 2026-10-07) and the stored models were trained on it. All accuracy figures are retrospective: three winters, each predicted by a model trained only on earlier days, using observed weather |
+| SAM stack and Lambda package | **Deployed** on 11 Oct 2026 (stack `kal-ki-hawa`, ap-southeast-2, CREATE_COMPLETE). The deployed package was checked (numpy, scipy and xgboost 3.4.1 import) and the SNS subscription is confirmed |
+| First live nightly run (OpenAQ and Open-Meteo calls from inside the Lambda, forecast row, alert e-mail) | **Not yet confirmed.** When this was written the function had not run yet; its first run is due at the 23:00 IST schedule on 11 Oct 2026. Until then the live data fetch inside the Lambda, the stored forecast and the alert e-mail are unconfirmed |
+| Forward test, winter 2026-27 | **Set up, not started.** Shadow logging of V2 and the hybrid is deployed and V1 still serves. Runs on 11-13 Oct are rehearsal; the scored window opens with the run on 14 Oct 23:00 IST (target date 15 Oct) and is not analysed before 16 Feb 2027 (`FORWARD_TEST_OPERATIONS.md`) |
+| Dashboard hosting (Amplify) | A manual upload, not part of the stack: set `web/config.js` to the stack's `ApiUrl` and host the `web/` folder |
 
 Synthetic results are only there to prove the code runs. **Never show synthetic numbers as real.** The site shows a
 "DEMO DATA" banner whenever the data source is synthetic.
