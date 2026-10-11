@@ -1,0 +1,143 @@
+{
+ "date": "2026-10-07",
+ "stations": [
+  {
+   "id": 17,
+   "name": "R K Puram, Delhi - DPCC",
+   "short": "R K Puram",
+   "lat": 28.5633,
+   "lon": 77.1869,
+   "pm25": 64.5,
+   "aqi": 113,
+   "category": "Moderate",
+   "tomorrow_est": {
+    "pm25": 63.4,
+    "aqi": 109,
+    "category": "Moderate"
+   }
+  },
+  {
+   "id": 235,
+   "name": "Anand Vihar, New Delhi - DPCC",
+   "short": "Anand Vihar",
+   "lat": 28.6469,
+   "lon": 77.3158,
+   "pm25": 40.5,
+   "aqi": 67,
+   "category": "Satisfactory",
+   "tomorrow_est": {
+    "pm25": 39.8,
+    "aqi": 66,
+    "category": "Satisfactory"
+   }
+  },
+  {
+   "id": 50,
+   "name": "Punjabi Bagh, Delhi - DPCC",
+   "short": "Punjabi Bagh",
+   "lat": 28.674,
+   "lon": 77.131,
+   "pm25": null,
+   "aqi": null,
+   "category": null,
+   "tomorrow_est": null
+  },
+  {
+   "id": 5404,
+   "name": "Pusa, Delhi - IMD",
+   "short": "Pusa",
+   "lat": 28.6397,
+   "lon": 77.1461,
+   "pm25": 64.1,
+   "aqi": 112,
+   "category": "Moderate",
+   "tomorrow_est": {
+    "pm25": 63.0,
+    "aqi": 108,
+    "category": "Moderate"
+   }
+  },
+  {
+   "id": 5613,
+   "name": "ITO, New Delhi - CPCB",
+   "short": "ITO",
+   "lat": 28.6316,
+   "lon": 77.241,
+   "pm25": null,
+   "aqi": null,
+   "category": null,
+   "tomorrow_est": null
+  },
+  {
+   "id": 6931,
+   "name": "Dwarka-Sector 8, Delhi - DPCC",
+   "short": "Dwarka-8",
+   "lat": 28.571,
+   "lon": 77.0719,
+   "pm25": 65.0,
+   "aqi": 115,
+   "category": "Moderate",
+   "tomorrow_est": {
+    "pm25": 63.8,
+    "aqi": 111,
+    "category": "Moderate"
+   }
+  },
+  {
+   "id": 10831,
+   "name": "Rohini, Delhi - DPCC",
+   "short": "Rohini",
+   "lat": 28.7324,
+   "lon": 77.1186,
+   "pm25": 58.1,
+   "aqi": 97,
+   "category": "Satisfactory",
+   "tomorrow_est": {
+    "pm25": 57.1,
+    "aqi": 95,
+    "category": "Satisfactory"
+   }
+  },
+  {
+   "id": 8239,
+   "name": "Okhla Phase-2, Delhi - DPCC",
+   "short": "Okhla-2",
+   "lat": 28.5308,
+   "lon": 77.2711,
+   "pm25": 50.1,
+   "aqi": 83,
+   "category": "Satisfactory",
+   "tomorrow_est": {
+    "pm25": 49.3,
+    "aqi": 82,
+    "category": "Satisfactory"
+   }
+  },
+  {
+   "id": 6358,
+   "name": "Mandir Marg, New Delhi - DPCC",
+   "short": "Mandir Marg",
+   "lat": 28.6366,
+   "lon": 77.201,
+   "pm25": 60.1,
+   "aqi": 101,
+   "category": "Moderate",
+   "tomorrow_est": {
+    "pm25": 59.0,
+    "aqi": 98,
+    "category": "Satisfactory"
+   }
+  },
+  {
+   "id": 6932,
+   "name": "Alipur, Delhi - DPCC",
+   "short": "Alipur",
+   "lat": 28.815,
+   "lon": 77.153,
+   "pm25": null,
+   "aqi": null,
+   "category": null,
+   "tomorrow_est": null
+  }
+ ]
+}

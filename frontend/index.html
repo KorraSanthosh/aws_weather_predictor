@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kal Ki Hawa — Tomorrow's air for Delhi schools</title>
+    <meta name="description" content="Machine-learning forecast of tomorrow's PM2.5 and AQI for Delhi, with a clear go / caution / indoors call for schools." />
+    <script>
+      (function () {
+        try {
+          var m = localStorage.getItem("kkh-theme") || "system";
+          var dark = m === "dark" || (m === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+          document.documentElement.dataset.theme = dark ? "dark" : "light";
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

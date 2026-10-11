@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Kal Ki Hawa — Tomorrow's air for Delhi schools</title>
   <meta name="description" content="Machine-learning forecast of tomorrow's PM2.5 and AQI for Delhi, with a clear go / caution / indoors call for schools.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -45,6 +46,24 @@
       </div>
     </section>
 
+    <section class="card" id="map-card" aria-labelledby="map-title">
+      <div class="map-head">
+        <div>
+          <h2 id="map-title">Air quality across Delhi</h2>
+          <p class="muted small" id="map-note">Coloured areas show the AQI around each monitoring station.</p>
+        </div>
+        <div class="toggle" role="group" aria-label="Map view">
+          <button type="button" id="view-today" class="on" aria-pressed="true">Latest measured</button>
+          <button type="button" id="view-tomorrow" aria-pressed="false">Tomorrow (estimate)</button>
+        </div>
+      </div>
+      <div id="map" class="map" role="region" aria-label="Map of Delhi air quality stations"></div>
+      <div class="scale" id="scale" aria-hidden="true"></div>
+      <p class="muted small">Station values are measured PM2.5 converted to the Indian AQI. The model forecasts the city average, so
+        the tomorrow view scales each station by the city forecast; it is an estimate, not a per-station prediction.
+        Station positions are approximate.</p>
+    </section>
+
     <section class="card">
       <h2>How good is the forecast?</h2>
       <p class="muted">Predicted vs actual daily PM2.5 (µg/m³) on days the model had never seen.</p>
@@ -64,11 +83,12 @@
   </main>
 
   <footer class="wrap foot">
-    <p>Data: ground-station PM2.5 from OpenAQ (open data on AWS), weather from Open-Meteo, CAMS model benchmark.
+    <p>Data: ground-station PM2.5 from OpenAQ (open data on AWS), weather from Open-Meteo, map tiles © OpenStreetMap contributors, CAMS model benchmark.
        Built on AWS: S3, Lambda, EventBridge, DynamoDB, SNS, API Gateway, Amplify.</p>
     <p>Guidance is general and not medical advice. School closure decisions rest with school management and the local authority.</p>
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script src="config.js"></script>
   <script src="app.js"></script>
 </body>
