@@ -216,6 +216,24 @@
   }
   getJSON("data/stations.json").then(initMap).catch(function () { $("map-card").hidden = true; });
 
+
+  function noLiveForecast() {
+    $("target-date").textContent = "tomorrow";
+    $("aqi").textContent = "–";
+    var cat = $("category"); cat.textContent = "No live forecast"; cat.className = "pill";
+    $("pm-range").textContent = "The nightly run forecasts only from fresh air-quality readings, and none are available right now. " +
+      "The forecast appears here by itself as soon as they are.";
+    $("today-line").textContent = "";
+    $("decision").textContent = "–"; $("decision").className = "decision-word";
+    $("headline").textContent = "No forecast to act on yet";
+    $("advice").textContent = "Please check today's local air-quality reading before planning outdoor activities.";
+    Promise.all([getJSON("data/history.json").catch(function () { return []; }),
+                 getJSON("data/metrics.json").catch(function () { return null; })]).then(function (r) {
+      drawChart(r[0] || []);
+      if (r[1]) drawMetrics(r[1]);
+    });
+  }
+
   var metricsP = getJSON("data/metrics.json").catch(function () { return null; });
   var main;
   if (API) {
@@ -237,6 +255,9 @@
     }
     render(fc, hist, metrics);
   }).catch(function (e) {
+    // The API answers 404 only while no forecast has ever been stored (the nightly run refuses to forecast from stale data).
+    // Say that plainly and still show the retrospective evidence, instead of a red error.
+    if (API && /returned 404$/.test(e.message)) { noLiveForecast(); return; }
     showError("Could not load the forecast. " + e.message);
   });
 })();
