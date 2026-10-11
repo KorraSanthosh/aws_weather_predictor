@@ -13,7 +13,7 @@ for every station and the UTC reading does not."""
 import csv
 import json
 import sys
-from datetime import datetime, timedelta, timezone
+from datetime import timedelta, timezone
 from pathlib import Path
 
 import numpy as np
@@ -21,7 +21,7 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import build_dataset as bd  # noqa: E402
-from convert_opencity import PM_COL, TS_COL, station_id  # noqa: E402
+from convert_opencity import PM_COL, TS_COL, parse_labelled, parse_wall_clock, station_id  # noqa: E402
 
 SHIFTS = (0.0, -5.0, -5.5, -6.0, 5.5)
 
@@ -40,7 +40,7 @@ def cpcb_daily_check(f, sid, raw):
         for r in csv.DictReader(fh):
             t, v = r.get(TS_COL), r.get(PM_COL)
             if t and v:
-                rd.append((datetime.fromisoformat(t).replace(tzinfo=None), float(v)))
+                rd.append((parse_wall_clock(t), float(v)))
     out = {}
     for name, sh in (("label_is_IST", 0.0), ("label_is_UTC", 5.5)):
         dd = {}
@@ -69,7 +69,7 @@ def main(src="data/raw/opencity_2024_25", raw="data/raw"):
             for r in csv.DictReader(fh):
                 t, v = r.get(TS_COL), r.get(PM_COL)
                 if t and v:
-                    rd.append((datetime.fromisoformat(t), float(v)))
+                    rd.append((parse_labelled(t), float(v)))
         res = {}
         for sh in SHIFTS:
             h = {}

@@ -11,6 +11,9 @@ Rules (fixed, written down before the data was used):
     Timestamps are therefore written as IST (+05:30).
   * GAP-FILL ONLY.  A reading is kept only if the station has NO OpenAQ reading at all on that IST day.  Days OpenAQ
     already covers are untouched, so nothing in the existing hourly history changes and no day is double counted.
+  * PARSING.  The timestamp text is read by parse_wall_clock() below, NOT by datetime.fromisoformat: Python 3.10 cannot read
+    the `+0000` form (no colon) or odd fraction lengths, so the same file converted on 3.10 and on 3.11+ must not differ.
+    The wall-clock fields are kept exactly as written and the offset is discarded without shifting anything.
   * Blank PM2.5 values are dropped; nothing is interpolated.
   * Stations are mapped to the OpenAQ station ids already used by the CPCB-daily loader (pipeline/build_dataset.py).
 """
@@ -30,6 +33,47 @@ import build_dataset as bd  # noqa: E402
 
 IST = timezone(timedelta(hours=5, minutes=30))
 PM_COL, TS_COL = "PM2.5 (µg/m³)", "Timestamp"
+
+
+# "2024-03-01T00:15:00.000000+0000" and its relatives. Date, optional time (seconds and fraction optional), optional offset
+# written Z, +HH, +HHMM or +HH:MM. Written by hand because datetime.fromisoformat differs between Python 3.10 and 3.11+.
+_TS = re.compile(r"""^(\d{4})-(\d{2})-(\d{2})
+                     (?:[T ](\d{2}):(\d{2})(?::(\d{2})(?:[.,](\d{1,9}))?)?
+                        (?:(Z)|([+-])(\d{2})(?::?(\d{2}))?)?)?$""", re.X)
+
+
+def _parse_timestamp(text: str):
+    """(naive wall-clock datetime, UTC offset as a timedelta or None). Raises ValueError for anything unrecognised."""
+    m = _TS.match(text.strip()) if isinstance(text, str) else None
+    if not m:
+        raise ValueError(f"unrecognised OpenCity timestamp {text!r}")
+    y, mo, d, hh, mi, ss, frac, zulu, sign, oh, om = m.groups()
+    micro = int((frac or "0")[:6].ljust(6, "0"))                     # more than 6 digits: truncate, as fromisoformat does
+    try:
+        naive = datetime(int(y), int(mo), int(d), int(hh or 0), int(mi or 0), int(ss or 0), micro)
+    except ValueError as e:
+        raise ValueError(f"unrecognised OpenCity timestamp {text!r}: {e}") from None
+    offset = None
+    if zulu:
+        offset = timedelta(0)
+    elif sign:
+        if int(oh) > 23 or int(om or 0) > 59:
+            raise ValueError(f"unrecognised OpenCity timestamp {text!r}: bad UTC offset")
+        offset = (1 if sign == "+" else -1) * timedelta(hours=int(oh), minutes=int(om or 0))
+    return naive, offset
+
+
+def parse_wall_clock(text: str) -> datetime:
+    """The timestamp as a NAIVE wall-clock datetime: the printed date and time unchanged, the UTC offset dropped without
+    converting anything (the file's `+0000` label is wrong, the clock reading is Delhi time). Same result on every Python."""
+    return _parse_timestamp(text)[0]
+
+
+def parse_labelled(text: str) -> datetime:
+    """The timestamp taken at face value, offset included (aware when an offset is written, naive otherwise). Only for
+    pipeline/check_opencity_timezone.py, which deliberately tests what the label would mean if it were true."""
+    naive, offset = _parse_timestamp(text)
+    return naive if offset is None else naive.replace(tzinfo=timezone(offset) if offset else timezone.utc)
 
 
 def station_id(filename: str) -> str:
@@ -68,7 +112,10 @@ def convert(src: Path, out: Path, raw: Path):
                 if v in (None, ""):
                     blank += 1
                     continue
-                naive = datetime.fromisoformat(t).replace(tzinfo=None)      # wall-clock label; the "+0000" is wrong
+                try:
+                    naive = parse_wall_clock(t)                              # wall-clock label; the "+0000" is wrong
+                except ValueError as e:
+                    raise ValueError(f"{f.name}: {e}") from None
                 ts = naive.replace(tzinfo=IST)
                 if ts.date() in have:
                     dropped_cov += 1
